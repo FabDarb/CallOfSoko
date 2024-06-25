@@ -1,4 +1,6 @@
-﻿namespace CallOfSokoClient.Class.BackEnd
+﻿using CallOfLibrary;
+
+namespace CallOfSokoClient.Class.BackEnd
 {
     public class Wall : Block
     {
@@ -8,6 +10,7 @@
             X = x;
             Y = y;
             HitBox = new Rectangle(X, Y, 50, 50);
+            Type = DataBlockType.Wall;
         }
         public override void DrawBlock(PaintEventArgs e, PictureBox display)
         {

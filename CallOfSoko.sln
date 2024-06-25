@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallOfSokoClient", "CallOfSokoClient\CallOfSokoClient.csproj", "{954B8CBA-D020-4566-8858-7C4C94CD077A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1B2D5475-8461-49D4-B3E5-4E0B253B8CE8} = {1B2D5475-8461-49D4-B3E5-4E0B253B8CE8}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallOfSokoHub", "CallOfSokoHub\CallOfSokoHub.csproj", "{F824C66B-F8E4-479D-8460-08B81C1DC408}"
 EndProject
