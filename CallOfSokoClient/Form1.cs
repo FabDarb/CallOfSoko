@@ -8,18 +8,20 @@ namespace CallOfSokoClient
 {
     public partial class Form1 : Form
     {
-        public int UserId { get; set; }
-        public Player? player { get; set; }
+        public User MyUser { get; set; }
+        public Player? ActualPlayer { get; set; }
         HubConnection? connection;
         List<Block> Map = new List<Block>();
         Thread displayThread;
         public Form1()
         {
             InitializeComponent();
+            MyUser = new User();
             ConnectionToHub();
             displayThread = new Thread(new ThreadStart(UIUpdater));
             displayThread.IsBackground = true;
             displayThread.Start();
+
         }
 
         private async void ConnectionToHub()
@@ -50,7 +52,7 @@ namespace CallOfSokoClient
                 });
                 connection?.On<int>("JoiningConfirmed", (id) =>
                 {
-                    UserId = id;
+                    MyUser.UserId = id;
                 });
             }
             catch (Exception ex)
@@ -77,7 +79,10 @@ namespace CallOfSokoClient
                         Map.Add(new Wall(datablock.X, datablock.Y));
                         break;
                     case DataBlockType.Player:
-                        Map.Add(new Player(datablock.X, datablock.Y));
+                        DataPlayer dp = (DataPlayer)datablock;
+                        Player newP = new Player(dp.X, dp.Y, dp.Id);
+                        ActualPlayer = newP;
+                        Map.Add(newP);
                         break;
                 }
             }
@@ -88,6 +93,38 @@ namespace CallOfSokoClient
             {
                 mainDisplay.Invalidate();
                 Thread.Sleep(20);
+            }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            MyUser.MovementInput[e.KeyCode] = true;
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            MyUser.MovementInput[e.KeyCode] = false;
+        }
+
+        private void gameTimer_Tick(object sender, EventArgs e)
+        {
+            foreach (Keys input in MyUser.MovementInput.Keys)
+            {
+                switch (input)
+                {
+                    case Keys.W:
+                        if (MyUser.MovementInput[input]) --ActualPlayer!.Y;
+                        break;
+                    case Keys.S:
+                        if (MyUser.MovementInput[input]) ActualPlayer!.Y -= -1;
+                        break;
+                    case Keys.D:
+                        if (MyUser.MovementInput[input]) ActualPlayer!.X -= -1;
+                        break;
+                    case Keys.A:
+                        if (MyUser.MovementInput[input]) --ActualPlayer!.X;
+                        break;
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace CallOfLibrary
 {
-    internal class DataPlayer : DataBlock
+    public class DataPlayer : DataBlock
     {
         public int Id { get; set; }
 
