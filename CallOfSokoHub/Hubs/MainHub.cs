@@ -6,6 +6,11 @@ namespace CallOfSokoHub
     {
         MainGameProcess mainGameProcess = MainGameProcess.Instance;
 
+        public void JoinGame()
+        {
+            mainGameProcess.JoinGame(Clients.Caller);
+        }
+
         public void RequestMap()
         {
             mainGameProcess.Clients = Clients;

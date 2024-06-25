@@ -12,6 +12,8 @@
 
         public DataBlockType Type { get; set; }
 
+        public DataBlock()
+        { }
         public DataBlock(int x, int y, DataBlockType type)
         {
             X = x;
