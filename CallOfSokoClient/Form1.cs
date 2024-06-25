@@ -116,10 +116,10 @@ namespace CallOfSokoClient
                         if (MyUser.MovementInput[input]) --ActualPlayer!.Y;
                         break;
                     case Keys.S:
-                        if (MyUser.MovementInput[input]) ActualPlayer!.Y -= -1;
+                        if (MyUser.MovementInput[input]) ++ActualPlayer!.Y;
                         break;
                     case Keys.D:
-                        if (MyUser.MovementInput[input]) ActualPlayer!.X -= -1;
+                        if (MyUser.MovementInput[input]) ++ActualPlayer!.X;
                         break;
                     case Keys.A:
                         if (MyUser.MovementInput[input]) --ActualPlayer!.X;

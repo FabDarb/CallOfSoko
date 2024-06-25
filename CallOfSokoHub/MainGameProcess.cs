@@ -30,7 +30,10 @@ namespace CallOfSokoHub
         {
             model.UseTemplateMap();
             model.GeneratePlayers(Users.Values.ToList());
-            Clients?.All.SendAsync("UpdateGame", model.map);
+            foreach (var user in Users.Values)
+            {
+                user.proxy?.SendAsync("UpdateGame", model.map);
+            }
         }
     }
 }
