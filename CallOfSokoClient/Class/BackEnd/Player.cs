@@ -17,7 +17,7 @@ namespace CallOfSokoClient.Class.BackEnd
         public override void DrawBlock(PaintEventArgs e, PictureBox display)
         {
             Brush brush;
-            if (Id == 1)
+            if (Id == 0)
             {
                 brush = Brushes.BlanchedAlmond;
             }
