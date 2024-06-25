@@ -11,6 +11,18 @@ namespace CallOfSokoHub
             map = new List<DataBlock>();
         }
 
+        public void GeneratePlayers(List<User> users)
+        {
+            int x = 0;
+            int y = 0;
+            foreach (var user in users)
+            {
+                map.Add(new DataPlayer(user.Id, x, y));
+                x += 100;
+                y += 100;
+            }
+        }
+
         public void UseTemplateMap()
         {
             map.Clear();
@@ -20,9 +32,6 @@ namespace CallOfSokoHub
             map.Add(new DataBlock(200, 200, DataBlockType.Wall));
             map.Add(new DataBlock(150, 200, DataBlockType.Wall));
             map.Add(new DataBlock(250, 200, DataBlockType.Wall));
-            map.Add(new DataBlock(200, 0, DataBlockType.Player));
-            map.Add(new DataBlock(0, 200, DataBlockType.Player));
-
         }
 
     }
