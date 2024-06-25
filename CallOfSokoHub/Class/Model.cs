@@ -14,12 +14,12 @@ namespace CallOfSokoHub
         public void UseTemplateMap()
         {
             map.Clear();
-            map.Add(new DataBlock(0, 0, DataBlockType.Wall));
-            map.Add(new DataBlock(50, 0, DataBlockType.Wall));
-            map.Add(new DataBlock(100, 0, DataBlockType.Wall));
-            map.Add(new DataBlock(0, 50, DataBlockType.Wall));
-            map.Add(new DataBlock(0, 100, DataBlockType.Wall));
-            map.Add(new DataBlock(50, 50, DataBlockType.Wall));
+            map.Add(new DataBlock(200, 50, DataBlockType.Wall));
+            map.Add(new DataBlock(200, 100, DataBlockType.Wall));
+            map.Add(new DataBlock(200, 150, DataBlockType.Wall));
+            map.Add(new DataBlock(200, 200, DataBlockType.Wall));
+            map.Add(new DataBlock(150, 200, DataBlockType.Wall));
+            map.Add(new DataBlock(250, 200, DataBlockType.Wall));
         }
 
     }
