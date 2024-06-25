@@ -1,3 +1,4 @@
+using CallOfSokoClient.Class.BackEnd;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Configuration;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ namespace CallOfSokoClient
     public partial class Form1 : Form
     {
         HubConnection? connection;
+        List<Block> Map = new List<Block>();
         public Form1()
         {
             InitializeComponent();
@@ -28,6 +30,19 @@ namespace CallOfSokoClient
             }
         }
 
+        private void ListOfConnection()
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+
+
+        }
         private void mainDisplay_Paint(object sender, PaintEventArgs e)
         {
 
