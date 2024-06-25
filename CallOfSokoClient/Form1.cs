@@ -29,6 +29,7 @@ namespace CallOfSokoClient
                 connection = new HubConnectionBuilder().WithUrl($"http://{HubIP}:5034/CallOfHub").Build();
                 await connection.StartAsync();
                 ListOfConnection();
+                connection?.InvokeAsync("RequestMap");
             }
             catch (Exception ex)
             {
