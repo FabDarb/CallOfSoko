@@ -20,6 +20,9 @@ namespace CallOfSokoHub
             map.Add(new DataBlock(200, 200, DataBlockType.Wall));
             map.Add(new DataBlock(150, 200, DataBlockType.Wall));
             map.Add(new DataBlock(250, 200, DataBlockType.Wall));
+            map.Add(new DataBlock(200, 0, DataBlockType.Player));
+            map.Add(new DataBlock(0, 200, DataBlockType.Player));
+
         }
 
     }
