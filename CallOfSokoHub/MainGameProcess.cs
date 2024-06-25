@@ -20,6 +20,10 @@ namespace CallOfSokoHub
             int id = Users.Count;
             Users.Add(id, new User(id, "", proxy));
             Users[id].proxy?.SendAsync("JoiningConfirmed", id);
+            if (Users.Count == 2)
+            {
+                SendMap();
+            }
         }
 
         public void SendMap()
