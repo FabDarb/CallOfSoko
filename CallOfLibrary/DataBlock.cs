@@ -10,6 +10,13 @@
         public int X { get; set; }
         public int Y { get; set; }
 
-        public Type Type { get; set; }
+        public DataBlockType Type { get; set; }
+
+        public DataBlock(int x, int y, DataBlockType type)
+        {
+            X = x;
+            Y = y;
+            Type = type;
+        }
     }
 }

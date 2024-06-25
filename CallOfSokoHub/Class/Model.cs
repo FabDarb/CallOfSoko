@@ -1,6 +1,6 @@
 ﻿using CallOfLibrary;
 
-namespace CallOfSokoHub.Class
+namespace CallOfSokoHub
 {
     public class Model
     {
@@ -13,8 +13,13 @@ namespace CallOfSokoHub.Class
 
         public void UseTemplateMap()
         {
-            map.Add(new Wa)
-
+            map.Clear();
+            map.Add(new DataBlock(0, 0, DataBlockType.Wall));
+            map.Add(new DataBlock(50, 0, DataBlockType.Wall));
+            map.Add(new DataBlock(100, 0, DataBlockType.Wall));
+            map.Add(new DataBlock(0, 50, DataBlockType.Wall));
+            map.Add(new DataBlock(0, 100, DataBlockType.Wall));
+            map.Add(new DataBlock(50, 50, DataBlockType.Wall));
         }
 
     }
