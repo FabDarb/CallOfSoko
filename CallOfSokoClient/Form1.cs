@@ -8,6 +8,8 @@ namespace CallOfSokoClient
 {
     public partial class Form1 : Form
     {
+        public int UserId { get; set; }
+        public Player? player { get; set; }
         HubConnection? connection;
         List<Block> Map = new List<Block>();
         Thread displayThread;
@@ -29,7 +31,7 @@ namespace CallOfSokoClient
                 connection = new HubConnectionBuilder().WithUrl($"http://{HubIP}:5034/CallOfHub").Build();
                 await connection.StartAsync();
                 ListOfConnection();
-                connection?.InvokeAsync("RequestMap");
+                connection?.InvokeAsync("JoinGame");
             }
             catch (Exception ex)
             {
@@ -45,6 +47,10 @@ namespace CallOfSokoClient
                 {
                     Map.Clear();
                     UpdateMap(datablocks);
+                });
+                connection?.On<int>("JoiningConfirmed", (id) =>
+                {
+                    UserId = id;
                 });
             }
             catch (Exception ex)

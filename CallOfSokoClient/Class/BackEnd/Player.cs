@@ -4,6 +4,7 @@ namespace CallOfSokoClient.Class.BackEnd
 {
     public class Player : Block
     {
+        public int Id { get; set; }
         public Player(int x, int y)
         {
             X = x;
