@@ -15,7 +15,7 @@ namespace CallOfSokoHub
         public void SendMap()
         {
             model.UseTemplateMap();
-            Clients?.All.SendAsync("ReceiveMap", model.map);
+            Clients?.All.SendAsync("UpdateGame", model.map);
         }
     }
 }
