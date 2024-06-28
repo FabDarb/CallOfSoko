@@ -4,11 +4,14 @@
     {
         public int Id { get; set; }
 
-        public DataPlayer(int id, int x, int y)
+        public int Angle { get; set; }
+
+        public DataPlayer(int id, int x, int y, int angle)
         {
             Id = id;
             X = x;
             Y = y;
+            Angle = angle;
             Type = DataBlockType.Player;
         }
     }

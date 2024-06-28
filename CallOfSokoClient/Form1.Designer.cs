@@ -40,7 +40,9 @@
             mainDisplay.Size = new Size(800, 450);
             mainDisplay.TabIndex = 0;
             mainDisplay.TabStop = false;
+            mainDisplay.Click += mainDisplay_Click;
             mainDisplay.Paint += mainDisplay_Paint;
+            mainDisplay.MouseMove += mainDisplay_MouseMove;
             // 
             // Form1
             // 
@@ -52,7 +54,6 @@
             Text = "Form1";
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
-            MouseDown += Form1_MouseDown;
             ((System.ComponentModel.ISupportInitialize)mainDisplay).EndInit();
             ResumeLayout(false);
         }

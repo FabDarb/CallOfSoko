@@ -35,13 +35,14 @@ namespace CallOfSokoClient.Class.BackEnd
                     Player p = PlayerList.Where((player) => player.Id == dataplayer.Id).First()!;
                     p.X = dataplayer.X;
                     p.Y = dataplayer.Y;
+                    p.Angle = dataplayer.Angle;
                 }
             }
             else
             {
                 foreach (DataPlayer dataplayer in dataplayers)
                 {
-                    Player p = new Player(dataplayer.X, dataplayer.Y, dataplayer.Id);
+                    Player p = new Player(dataplayer.X, dataplayer.Y, dataplayer.Angle, dataplayer.Id);
                     PlayerList.Add(p);
                     MapDisplay.Add(p);
                     if (p.Id == MyUser.UserId) ActualPlayer = p;

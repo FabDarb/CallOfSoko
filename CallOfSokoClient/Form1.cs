@@ -108,7 +108,7 @@ namespace CallOfSokoClient
                         }
                     }
                     map.PlayerMove(MyUser);
-                    DataPlayer dp = new DataPlayer(map.ActualPlayer!.Id, map.ActualPlayer.X, map.ActualPlayer.Y);
+                    DataPlayer dp = new DataPlayer(map.ActualPlayer!.Id, map.ActualPlayer.X, map.ActualPlayer.Y, map.ActualPlayer.Angle);
                     connection?.InvokeAsync("PlayerMove", dp);
                 }
 
@@ -134,16 +134,25 @@ namespace CallOfSokoClient
             }
         }
 
-        private void Form1_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
-
         private bool TestCollision(Rectangle rec1, Rectangle rec2)
         {
             bool test = false;
             if (rec1.IntersectsWith(rec2)) { test = true; }
             return test;
+        }
+
+        private void mainDisplay_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mainDisplay_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (map.IsInit)
+            {
+                int angle = (int)Math.Round(Math.Atan2((e.Y - map.ActualPlayer!.Y), e.X - map.ActualPlayer!.X) * 180 / Math.PI);
+                map.ActualPlayer!.Angle = angle;
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ namespace CallOfSokoHub
             int y = 0;
             foreach (var user in users)
             {
-                PlayerList.Add(new DataPlayer(user.Id, x, y));
+                PlayerList.Add(new DataPlayer(user.Id, x, y, 0));
                 x += 100;
                 y += 100;
             }
@@ -40,6 +40,7 @@ namespace CallOfSokoHub
             DataPlayer dp = PlayerList.Where((p) => p.Id == player.Id).FirstOrDefault()!;
             dp.X = player.X;
             dp.Y = player.Y;
+            dp.Angle = player.Angle;
         }
     }
 }
