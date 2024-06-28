@@ -28,9 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
             mainDisplay = new PictureBox();
-            gameTimer = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)mainDisplay).BeginInit();
             SuspendLayout();
             // 
@@ -43,12 +41,6 @@
             mainDisplay.TabIndex = 0;
             mainDisplay.TabStop = false;
             mainDisplay.Paint += mainDisplay_Paint;
-            // 
-            // gameTimer
-            // 
-            gameTimer.Enabled = true;
-            gameTimer.Interval = 20;
-            gameTimer.Tick += gameTimer_Tick;
             // 
             // Form1
             // 
@@ -67,6 +59,5 @@
         #endregion
 
         private PictureBox mainDisplay;
-        private System.Windows.Forms.Timer gameTimer;
     }
 }

@@ -19,13 +19,13 @@ namespace CallOfSokoClient.Class.BackEnd
             Brush brush;
             if (Id == 0)
             {
-                brush = Brushes.BlanchedAlmond;
+                brush = Brushes.Green;
             }
             else
             {
-                brush = Brushes.Tomato;
+                brush = Brushes.Indigo;
             }
-            e.Graphics.FillRectangle(brush, HitBox);
+            e.Graphics.FillRectangle(brush, X, Y, 25, 25);
         }
     }
 }

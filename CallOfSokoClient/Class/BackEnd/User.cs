@@ -4,6 +4,8 @@
     {
         public int UserId { get; set; }
 
+        public int IsMoving { get; set; } = 0;
+
         public Dictionary<Keys, bool> MovementInput { get; set; }
 
         public User()

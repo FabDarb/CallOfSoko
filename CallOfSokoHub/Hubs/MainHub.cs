@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using CallOfLibrary;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CallOfSokoHub
 {
@@ -10,11 +11,9 @@ namespace CallOfSokoHub
         {
             mainGameProcess.JoinGame(Clients.Caller);
         }
-
-        public void RequestMap()
+        public void PlayerMove(DataPlayer player)
         {
-            mainGameProcess.Clients = Clients;
-            mainGameProcess.SendMap();
+            mainGameProcess.PlayerMove(player);
         }
     }
 }

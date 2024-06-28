@@ -9,10 +9,14 @@ namespace CallOfSokoClient
     public partial class Form1 : Form
     {
         public User MyUser { get; set; }
-        public Player? ActualPlayer { get; set; }
+
+        Map map = Map.Instance;
+
         HubConnection? connection;
-        List<Block> Map = new List<Block>();
+
         Thread displayThread;
+
+
         public Form1()
         {
             InitializeComponent();
@@ -21,7 +25,6 @@ namespace CallOfSokoClient
             displayThread = new Thread(new ThreadStart(UIUpdater));
             displayThread.IsBackground = true;
             displayThread.Start();
-
         }
 
         private async void ConnectionToHub()
@@ -45,10 +48,15 @@ namespace CallOfSokoClient
         {
             try
             {
-                connection?.On<List<DataBlock>>("UpdateGame", (datablocks) =>
+                connection?.On<List<DataBlock>>("CreateMap", (datablocks) =>
                 {
-                    Map.Clear();
-                    UpdateMap(datablocks);
+                    map.CreateMap(datablocks);
+
+                });
+                connection?.On<List<DataPlayer>>("UpdatePossitionPlayer", (dataPlayer) =>
+                {
+                    map.UpdateMap(dataPlayer, MyUser);
+                    if (!map.IsInit) map.IsInit = true;
                 });
                 connection?.On<int>("JoiningConfirmed", (id) =>
                 {
@@ -64,27 +72,9 @@ namespace CallOfSokoClient
         }
         private void mainDisplay_Paint(object sender, PaintEventArgs e)
         {
-            foreach (Block block in Map)
+            foreach (Block block in map.MapDisplay)
             {
                 block.DrawBlock(e, mainDisplay);
-            }
-        }
-        private void UpdateMap(List<DataBlock> datablocks)
-        {
-            foreach (DataBlock datablock in datablocks)
-            {
-                switch (datablock.Type)
-                {
-                    case DataBlockType.Wall:
-                        Map.Add(new Wall(datablock.X, datablock.Y));
-                        break;
-                    case DataBlockType.Player:
-                        DataPlayer dp = (DataPlayer)datablock;
-                        Player newP = new Player(dp.X, dp.Y, dp.Id);
-                        ActualPlayer = newP;
-                        Map.Add(newP);
-                        break;
-                }
             }
         }
         private void UIUpdater()
@@ -93,39 +83,26 @@ namespace CallOfSokoClient
             {
                 mainDisplay.Invalidate();
                 Thread.Sleep(20);
+                if (map.IsInit && MyUser.IsMoving > 0)
+                {
+                    map.PlayerMove(MyUser);
+                    DataPlayer dp = new DataPlayer(map.ActualPlayer!.Id, map.ActualPlayer.X, map.ActualPlayer.Y);
+                    connection?.InvokeAsync("PlayerMove", dp);
+                }
+
             }
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             MyUser.MovementInput[e.KeyCode] = true;
+            ++MyUser.IsMoving;
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             MyUser.MovementInput[e.KeyCode] = false;
-        }
-
-        private void gameTimer_Tick(object sender, EventArgs e)
-        {
-            foreach (Keys input in MyUser.MovementInput.Keys)
-            {
-                switch (input)
-                {
-                    case Keys.W:
-                        if (MyUser.MovementInput[input]) --ActualPlayer!.Y;
-                        break;
-                    case Keys.S:
-                        if (MyUser.MovementInput[input]) ++ActualPlayer!.Y;
-                        break;
-                    case Keys.D:
-                        if (MyUser.MovementInput[input]) ++ActualPlayer!.X;
-                        break;
-                    case Keys.A:
-                        if (MyUser.MovementInput[input]) --ActualPlayer!.X;
-                        break;
-                }
-            }
+            --MyUser.IsMoving;
         }
     }
 }

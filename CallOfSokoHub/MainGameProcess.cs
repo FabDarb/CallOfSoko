@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using CallOfLibrary;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CallOfSokoHub
 {
@@ -32,7 +33,22 @@ namespace CallOfSokoHub
             model.GeneratePlayers(Users.Values.ToList());
             foreach (var user in Users.Values)
             {
-                user.proxy?.SendAsync("UpdateGame", model.map);
+                user.proxy?.SendAsync("CreateMap", model.map);
+            }
+            SendPlayerList();
+        }
+
+        public void PlayerMove(DataPlayer player)
+        {
+            model.MovePlayerOnList(player);
+            SendPlayerList();
+        }
+
+        private void SendPlayerList()
+        {
+            foreach (var user in Users.Values)
+            {
+                user.proxy?.SendAsync("UpdatePossitionPlayer", model.PlayerList);
             }
         }
     }
