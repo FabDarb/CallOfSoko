@@ -86,10 +86,12 @@ namespace CallOfSokoClient
         {
             while (true)
             {
+
                 mainDisplay.Invalidate();
                 Thread.Sleep(20);
-                if (map.IsInit && MyUser.IsMoving > 0)
+                if (map.IsInit)
                 {
+                    MovementCollision();
                     foreach (var movementinput in MyUser.MovementInput.Values)
                     {
                         if (movementinput.IsActive)
@@ -112,6 +114,39 @@ namespace CallOfSokoClient
                     connection?.InvokeAsync("PlayerMove", dp);
                 }
 
+            }
+        }
+
+
+        private void MovementCollision()
+        {
+            foreach (Block block in map.MapDisplay.ToImmutableList())
+            {
+                if (map.ActualPlayer != block && TestCollision(map.ActualPlayer!.HitBox, block.HitBox))
+                {
+                    var intersection = Rectangle.Intersect(map.ActualPlayer!.HitBox, block.HitBox);
+                    bool top = intersection.Top == map.ActualPlayer!.HitBox.Top;
+                    bool bottom = intersection.Bottom == map.ActualPlayer!.HitBox.Bottom;
+                    bool left = intersection.Left == map.ActualPlayer!.HitBox.Left;
+                    bool right = intersection.Right == map.ActualPlayer!.HitBox.Right;
+
+                    if (top)
+                    {
+                        map.ActualPlayer!.Y += MyUser.MovementInput[Keys.W].Velocity;
+                    }
+                    if (bottom)
+                    {
+                        map.ActualPlayer!.Y -= MyUser.MovementInput[Keys.S].Velocity;
+                    }
+                    if (left)
+                    {
+                        map.ActualPlayer!.X += MyUser.MovementInput[Keys.A].Velocity;
+                    }
+                    if (right)
+                    {
+                        map.ActualPlayer!.X -= MyUser.MovementInput[Keys.D].Velocity;
+                    }
+                }
             }
         }
 
