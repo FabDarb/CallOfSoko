@@ -58,7 +58,10 @@ namespace CallOfSokoClient
                 connection?.On<List<DataPlayer>>("UpdatePossitionPlayer", (dataPlayer) =>
                 {
                     map.UpdateMap(dataPlayer, MyUser);
-                    if (!map.IsInit) map.IsInit = true;
+                    if (!map.IsInit)
+                    {
+                        map.IsInit = true;
+                    }
                 });
                 connection?.On<int>("JoiningConfirmed", (id) =>
                 {
@@ -129,6 +132,18 @@ namespace CallOfSokoClient
                 MyUser.MovementInput[e.KeyCode].IsActive = false;
                 --MyUser.IsMoving;
             }
+        }
+
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private bool TestCollision(Rectangle rec1, Rectangle rec2)
+        {
+            bool test = false;
+            if (rec1.IntersectsWith(rec2)) { test = true; }
+            return test;
         }
     }
 }

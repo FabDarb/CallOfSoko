@@ -52,6 +52,7 @@
             Text = "Form1";
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
+            MouseDown += Form1_MouseDown;
             ((System.ComponentModel.ISupportInitialize)mainDisplay).EndInit();
             ResumeLayout(false);
         }

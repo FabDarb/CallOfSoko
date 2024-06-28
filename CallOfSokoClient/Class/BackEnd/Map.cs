@@ -41,7 +41,7 @@ namespace CallOfSokoClient.Class.BackEnd
             {
                 foreach (DataPlayer dataplayer in dataplayers)
                 {
-                    Player p = new Player(dataplayer.X, dataplayer.Y, dataplayer.Id, MyUser.UserId);
+                    Player p = new Player(dataplayer.X, dataplayer.Y, dataplayer.Id);
                     PlayerList.Add(p);
                     MapDisplay.Add(p);
                     if (p.Id == MyUser.UserId) ActualPlayer = p;
