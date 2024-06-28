@@ -56,16 +56,16 @@ namespace CallOfSokoClient.Class.BackEnd
                 switch (input)
                 {
                     case Keys.W:
-                        if (MyUser.MovementInput[input]) --ActualPlayer!.Y;
+                        if (MyUser.MovementInput[input].IsActive) ActualPlayer!.Y -= MyUser.MovementInput[input].Velocity;
                         break;
                     case Keys.S:
-                        if (MyUser.MovementInput[input]) ++ActualPlayer!.Y;
+                        if (MyUser.MovementInput[input].IsActive) ActualPlayer!.Y += MyUser.MovementInput[input].Velocity;
                         break;
                     case Keys.D:
-                        if (MyUser.MovementInput[input]) ++ActualPlayer!.X;
+                        if (MyUser.MovementInput[input].IsActive) ActualPlayer!.X += MyUser.MovementInput[input].Velocity;
                         break;
                     case Keys.A:
-                        if (MyUser.MovementInput[input]) --ActualPlayer!.X;
+                        if (MyUser.MovementInput[input].IsActive) ActualPlayer!.X -= MyUser.MovementInput[input].Velocity;
                         break;
                 }
             }

@@ -9,6 +9,7 @@ namespace CallOfSokoClient
     public partial class Form1 : Form
     {
         public User MyUser { get; set; }
+        public const int MaxPlayerVelocity = 5;
 
         Map map = Map.Instance;
 
@@ -85,6 +86,23 @@ namespace CallOfSokoClient
                 Thread.Sleep(20);
                 if (map.IsInit && MyUser.IsMoving > 0)
                 {
+                    foreach (var movementinput in MyUser.MovementInput.Values)
+                    {
+                        if (movementinput.IsActive)
+                        {
+                            if (movementinput.Velocity < MaxPlayerVelocity)
+                            {
+                                ++movementinput.Velocity;
+                            }
+                        }
+                        else
+                        {
+                            if (movementinput.Velocity > 0)
+                            {
+                                --movementinput.Velocity;
+                            }
+                        }
+                    }
                     map.PlayerMove(MyUser);
                     DataPlayer dp = new DataPlayer(map.ActualPlayer!.Id, map.ActualPlayer.X, map.ActualPlayer.Y);
                     connection?.InvokeAsync("PlayerMove", dp);
@@ -95,14 +113,21 @@ namespace CallOfSokoClient
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            MyUser.MovementInput[e.KeyCode] = true;
-            ++MyUser.IsMoving;
+            if (MyUser.MovementInput.ContainsKey(e.KeyCode))
+            {
+                MyUser.MovementInput[e.KeyCode].IsActive = true;
+                ++MyUser.IsMoving;
+            }
         }
+
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
-            MyUser.MovementInput[e.KeyCode] = false;
-            --MyUser.IsMoving;
+            if (MyUser.MovementInput.ContainsKey(e.KeyCode))
+            {
+                MyUser.MovementInput[e.KeyCode].IsActive = false;
+                --MyUser.IsMoving;
+            }
         }
     }
 }
