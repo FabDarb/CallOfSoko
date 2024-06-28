@@ -7,9 +7,9 @@ namespace CallOfSokoClient.Class.BackEnd
 
         public Rectangle? MoveViewPlayer;
 
-        public int? RecX { get; set; }
+        public int RecX { get; set; }
 
-        public int? RecY { get; set; }
+        public int RecY { get; set; }
 
         private int _X;
 
@@ -17,11 +17,8 @@ namespace CallOfSokoClient.Class.BackEnd
         {
             set
             {
-                if (RecX != null)
-                {
-                    RecX = _X - 50;
-                }
                 _X = value;
+                RecX = value - 50;
             }
             get { return _X; }
         }
@@ -30,11 +27,8 @@ namespace CallOfSokoClient.Class.BackEnd
         {
             set
             {
-                if (RecY != null)
-                {
-                    RecY = _Y - 50;
-                }
                 _Y = value;
+                RecY = value - 50;
             }
             get { return _Y; }
         }
@@ -47,12 +41,18 @@ namespace CallOfSokoClient.Class.BackEnd
             Type = DataBlockType.Player;
             if (myUserId == id)
             {
-                MoveViewPlayer = new Rectangle(RecX!.Value, RecY!.Value - 50, 125, 125);
+                MoveViewPlayer = new Rectangle(RecX, RecY, 125, 125);
             }
         }
 
         public override void DrawBlock(PaintEventArgs e, PictureBox display)
         {
+            if (MoveViewPlayer != null)
+            {
+                MoveViewPlayer = new Rectangle(RecX, RecY, 125, 125);
+                Brush newB = new SolidBrush(Color.FromArgb(50, 200, 200, 200));
+                e.Graphics.FillEllipse(newB, MoveViewPlayer.Value);
+            }
             Brush brush;
             if (Id == 0)
             {
@@ -63,10 +63,6 @@ namespace CallOfSokoClient.Class.BackEnd
                 brush = Brushes.Indigo;
             }
             e.Graphics.FillRectangle(brush, X, Y, 25, 25);
-            if (MoveViewPlayer != null)
-            {
-                e.Graphics.FillEllipse(Brushes.LightGray, MoveViewPlayer.Value);
-            }
         }
     }
 }

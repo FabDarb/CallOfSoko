@@ -1,6 +1,7 @@
 using CallOfLibrary;
 using CallOfSokoClient.Class.BackEnd;
 using Microsoft.AspNetCore.SignalR.Client;
+using System.Collections.Immutable;
 using System.Configuration;
 using System.Diagnostics;
 
@@ -73,7 +74,7 @@ namespace CallOfSokoClient
         }
         private void mainDisplay_Paint(object sender, PaintEventArgs e)
         {
-            foreach (Block block in map.MapDisplay)
+            foreach (Block block in map.MapDisplay.ToImmutableList())
             {
                 block.DrawBlock(e, mainDisplay);
             }
