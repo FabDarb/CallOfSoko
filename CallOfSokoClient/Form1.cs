@@ -67,6 +67,10 @@ namespace CallOfSokoClient
                 {
                     MyUser.UserId = id;
                 });
+                connection?.On<List<DataBullet>>("UpdateShoot", (dataBullets) =>
+                {
+                    map.UpdateShoot(dataBullets);
+                });
             }
             catch (Exception ex)
             {
@@ -178,7 +182,7 @@ namespace CallOfSokoClient
 
         private void mainDisplay_Click(object sender, EventArgs e)
         {
-            connection!.InvokeAsync("Shoot", MyUser.UserId);
+            connection?.InvokeAsync("Shoot", MyUser.UserId);
         }
 
         private void mainDisplay_MouseMove(object sender, MouseEventArgs e)
