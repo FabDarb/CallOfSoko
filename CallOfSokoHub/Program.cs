@@ -1,9 +1,13 @@
 using CallOfSokoHub;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSignalR().AddNewtonsoftJsonProtocol();
+builder.Services.AddSignalR().AddNewtonsoftJsonProtocol(opts =>
+{
+    opts.PayloadSerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
+});
 
 var app = builder.Build();
 
