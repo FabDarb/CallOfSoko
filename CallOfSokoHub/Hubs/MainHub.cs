@@ -17,7 +17,7 @@ namespace CallOfSokoHub
         }
         public void Shoot(int userId)
         {
-
+            mainGameProcess.PlayerShoot(userId);
         }
     }
 }
