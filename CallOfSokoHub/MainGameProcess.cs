@@ -13,6 +13,7 @@ namespace CallOfSokoHub
         private MainGameProcess()
         {
             model = new Model();
+            model.entityUpdated += UpdateShoot;
             Users = new Dictionary<int, User>();
         }
 
@@ -47,9 +48,13 @@ namespace CallOfSokoHub
         public void PlayerShoot(int userId)
         {
             model.GenerateBullet(userId);
+        }
+
+        private void UpdateShoot(object? sender, EventArgs e)
+        {
             foreach (var user in Users.Values)
             {
-                user.proxy?.SendAsync("UpdateShoot", model.EntityList);
+                user.proxy?.SendAsync("UpdateShoot", model.BulletList);
             }
         }
 

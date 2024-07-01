@@ -6,7 +6,9 @@ namespace CallOfSokoHub
     {
         public List<DataBlock> Map { get; set; }
         public List<DataPlayer> PlayerList { get; set; }
-        public List<DataBlock> EntityList { get; set; }
+        public List<DataBullet> BulletList { get; set; }
+
+        public event EventHandler? entityUpdated;
 
         private Thread solver;
         private bool solverIsAlive = false;
@@ -15,7 +17,7 @@ namespace CallOfSokoHub
         {
             Map = new List<DataBlock>();
             PlayerList = new List<DataPlayer>();
-            EntityList = new List<DataBlock>();
+            BulletList = new List<DataBullet>();
             solver = new Thread(new ThreadStart(Solve));
             solver.Start();
         }
@@ -64,8 +66,8 @@ namespace CallOfSokoHub
             DataPlayer? player = FindPlayerById(userId);
             if (player != null)
             {
-                int id = EntityList.Count;
-                EntityList.Add(new DataBullet(id, player.X, player.Y, player.Id, player.Angle));
+                int id = BulletList.Count;
+                BulletList.Add(new DataBullet(id, player.X, player.Y, player.Id, player.Angle));
             }
         }
 
@@ -85,10 +87,11 @@ namespace CallOfSokoHub
         {
             while (solverIsAlive)
             {
-                foreach (DataBlock entity in EntityList)
+                foreach (DataBullet bullet in BulletList)
                 {
-                    entity.Update();
+                    bullet.Update();
                 }
+                entityUpdated?.Invoke(null, EventArgs.Empty);
             }
         }
     }
