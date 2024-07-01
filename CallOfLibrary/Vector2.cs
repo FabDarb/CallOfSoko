@@ -1,4 +1,4 @@
-﻿namespace CallOfSokoClient.Class.BackEnd
+﻿namespace CallOfLibrary
 {
     public class Vector2
     {

@@ -33,7 +33,7 @@ namespace CallOfSokoHub
             model.GeneratePlayers(Users.Values.ToList());
             foreach (var user in Users.Values)
             {
-                user.proxy?.SendAsync("CreateMap", model.map);
+                user.proxy?.SendAsync("CreateMap", model.Map);
             }
             SendPlayerList();
         }
@@ -44,6 +44,15 @@ namespace CallOfSokoHub
             SendPlayerList();
         }
 
+        public void PlayerShoot(int userId)
+        {
+            model.GenerateBullet(userId);
+            foreach (var user in Users.Values)
+            {
+                user.proxy?.SendAsync("UpdateShoot", model.EntityList);
+            }
+        }
+
         private void SendPlayerList()
         {
             foreach (var user in Users.Values)
@@ -51,5 +60,6 @@ namespace CallOfSokoHub
                 user.proxy?.SendAsync("UpdatePossitionPlayer", model.PlayerList);
             }
         }
+
     }
 }

@@ -20,5 +20,8 @@
             Y = y;
             Type = type;
         }
+
+        virtual public void Update() { }
     }
+
 }

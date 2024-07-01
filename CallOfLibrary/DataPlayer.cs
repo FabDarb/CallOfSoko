@@ -14,5 +14,10 @@
             Angle = angle;
             Type = DataBlockType.Player;
         }
+
+        public override void Update()
+        {
+
+        }
     }
 }

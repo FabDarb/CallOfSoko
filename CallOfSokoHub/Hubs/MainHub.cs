@@ -15,5 +15,9 @@ namespace CallOfSokoHub
         {
             mainGameProcess.PlayerMove(player);
         }
+        public void Shoot(int userId)
+        {
+
+        }
     }
 }
