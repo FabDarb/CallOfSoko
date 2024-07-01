@@ -3,7 +3,7 @@ using CallOfSokoHub;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSignalR();
+builder.Services.AddSignalR().AddNewtonsoftJsonProtocol();
 
 var app = builder.Build();
 
