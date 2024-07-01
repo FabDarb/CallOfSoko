@@ -24,7 +24,10 @@
 
         private void Update()
         {
-
+            CallOfSokoClient.Class.BackEnd.Vector2 v = new(X, Y);
+            v.Rotate(Speed, Angle);
+            X = (int)v.X;
+            Y = (int)v.Y;
         }
     }
 }

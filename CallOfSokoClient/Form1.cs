@@ -178,7 +178,7 @@ namespace CallOfSokoClient
 
         private void mainDisplay_Click(object sender, EventArgs e)
         {
-
+            connection!.InvokeAsync("Shoot", MyUser.UserId);
         }
 
         private void mainDisplay_MouseMove(object sender, MouseEventArgs e)
