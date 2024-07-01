@@ -69,6 +69,7 @@ namespace CallOfSokoHub
                 int id = BulletList.Count;
                 BulletList.Add(new DataBullet(id, player.X, player.Y, player.Id, player.Angle));
             }
+            StartUp();
         }
 
         private DataPlayer? FindPlayerById(int id)
@@ -85,13 +86,17 @@ namespace CallOfSokoHub
 
         private void Solve()
         {
-            while (solverIsAlive)
+            while (true)
             {
-                foreach (DataBullet bullet in BulletList)
+                if (solverIsAlive && BulletList.Count > 0)
                 {
-                    bullet.Update();
+                    foreach (DataBullet bullet in BulletList)
+                    {
+                        bullet.Update();
+                    }
+                    entityUpdated?.Invoke(null, EventArgs.Empty);
+                    Thread.Sleep(20);
                 }
-                entityUpdated?.Invoke(null, EventArgs.Empty);
             }
         }
     }
