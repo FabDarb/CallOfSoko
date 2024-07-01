@@ -8,6 +8,8 @@ namespace CallOfSokoClient.Class.BackEnd
         public Player? ActualPlayer { get; set; }
         public List<Player> PlayerList { get; set; } = new List<Player>();
 
+        public List<Bullet> BulletList { get; set; } = new List<Bullet>();
+
         static public Map Instance { get; } = new Map();
 
         public bool IsInit { get; set; } = false;
@@ -46,6 +48,26 @@ namespace CallOfSokoClient.Class.BackEnd
                     PlayerList.Add(p);
                     MapDisplay.Add(p);
                     if (p.Id == MyUser.UserId) ActualPlayer = p;
+                }
+            }
+        }
+
+        public void UpdateShoot(List<DataBullet> dataBullets)
+        {
+            foreach (DataBullet databullet in dataBullets)
+            {
+                Bullet? bu = BulletList.Where((bullet) => bullet.Id == databullet.Id).First();
+
+                if (bu != null)
+                {
+                    bu.X = databullet.X;
+                    bu.Y = databullet.Y;
+                }
+                else
+                {
+                    Bullet b = new Bullet(databullet.X, databullet.Y, databullet.IdPlayer, databullet.Id);
+                    BulletList.Add(b);
+                    MapDisplay.Add(b);
                 }
             }
         }

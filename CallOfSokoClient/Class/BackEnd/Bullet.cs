@@ -1,33 +1,28 @@
 ﻿namespace CallOfSokoClient
 {
-    internal class Bullet : Block
+    public class Bullet : Block
     {
+        public int Id { get; set; }
         public int IdPlayer { get; set; }
         public int Damage { get; set; } = 10;
-        public int Angle { get; set; }
-        public int Speed { get; set; } = 10;
 
-        public Bullet(int x, int y, int id, int angle)
+        private int _X;
+        public new int X { get { return _X; } set { _X = value; HitBox = new Rectangle(value, Y, 5, 5); } }
+        private int _Y;
+        public new int Y { get { return _Y; } set { _Y = value; HitBox = new Rectangle(X, value, 5, 5); } }
+
+        public Bullet(int x, int y, int pId, int id)
         {
-            IdPlayer = id;
+            IdPlayer = pId;
+            Id = id;
             X = x;
             Y = y;
-            Angle = angle;
             HitBox = new Rectangle(X, Y, 5, 5);
         }
 
         public override void DrawBlock(PaintEventArgs e, PictureBox display)
         {
-            Update();
             e.Graphics.FillEllipse(Brushes.DarkGray, X, Y, 5, 5);
-        }
-
-        private void Update()
-        {
-            CallOfSokoClient.Class.BackEnd.Vector2 v = new(X, Y);
-            v.Rotate(Speed, Angle);
-            X = (int)v.X;
-            Y = (int)v.Y;
         }
     }
 }
