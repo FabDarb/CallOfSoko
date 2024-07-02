@@ -13,7 +13,7 @@ namespace CallOfSokoHub
         private MainGameProcess()
         {
             model = new Model();
-            model.entityUpdated += UpdateShoot;
+            model.entityUpdated += Update;
             Users = new Dictionary<int, User>();
         }
 
@@ -25,6 +25,7 @@ namespace CallOfSokoHub
             if (Users.Count == 2)
             {
                 SendMap();
+                model.solverIsAlive = true;
             }
         }
 
@@ -36,13 +37,11 @@ namespace CallOfSokoHub
             {
                 user.proxy?.SendAsync("CreateMap", model.Map);
             }
-            SendPlayerList();
         }
 
         public void PlayerMove(DataPlayer player)
         {
             model.MovePlayerOnList(player);
-            SendPlayerList();
         }
 
         public void PlayerShoot(int userId)
@@ -50,19 +49,15 @@ namespace CallOfSokoHub
             model.GenerateBullet(userId);
         }
 
-        private void UpdateShoot(object? sender, EventArgs e)
+        private async void Update(object? sender, EventArgs e)
         {
-            foreach (var user in Users.Values)
+            Updater? up = (Updater?)sender;
+            if (up != null)
             {
-                user.proxy?.SendAsync("UpdateShoot", model.BulletList);
-            }
-        }
-
-        private void SendPlayerList()
-        {
-            foreach (var user in Users.Values)
-            {
-                user.proxy?.SendAsync("UpdatePossitionPlayer", model.PlayerList);
+                foreach (var user in Users.Values)
+                {
+                    await user.proxy?.SendAsync("Update", up)!;
+                }
             }
         }
 

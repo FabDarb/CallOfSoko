@@ -6,18 +6,18 @@ namespace CallOfSokoHub
     {
         public List<DataBlock> Map { get; set; }
         public List<DataPlayer> PlayerList { get; set; }
-        public List<DataBullet> BulletList { get; set; }
+        public List<string> BulletList { get; set; }
 
         public event EventHandler? entityUpdated;
 
         private Thread solver;
-        private bool solverIsAlive = false;
+        public bool solverIsAlive = false;
 
         public Model()
         {
             Map = new List<DataBlock>();
             PlayerList = new List<DataPlayer>();
-            BulletList = new List<DataBullet>();
+            BulletList = new List<string>();
             solver = new Thread(new ThreadStart(Solve));
             solver.Start();
         }
@@ -34,15 +34,6 @@ namespace CallOfSokoHub
             }
         }
 
-        public void StartUp()
-        {
-            solverIsAlive = true;
-        }
-        public void EndGame()
-        {
-            solverIsAlive = false;
-        }
-
         public void UseTemplateMap()
         {
             Map.Clear();
@@ -52,6 +43,8 @@ namespace CallOfSokoHub
             Map.Add(new DataBlock(200, 200, DataBlockType.Wall));
             Map.Add(new DataBlock(150, 200, DataBlockType.Wall));
             Map.Add(new DataBlock(250, 200, DataBlockType.Wall));
+            Map.Add(new DataBlock(250, 250, DataBlockType.Wall));
+            Map.Add(new DataBlock(250, 300, DataBlockType.Wall));
         }
         public void MovePlayerOnList(DataPlayer player)
         {
@@ -66,10 +59,9 @@ namespace CallOfSokoHub
             DataPlayer? player = FindPlayerById(userId);
             if (player != null)
             {
-                int id = BulletList.Count;
-                BulletList.Add(new DataBullet(id, player.X, player.Y, player.Id, player.Angle));
+                BulletList.Add($"{player.Id},{player.X},{player.Y},{player.Angle}");
+                Console.WriteLine($"angle: {player.Angle}");
             }
-            StartUp();
         }
 
         private DataPlayer? FindPlayerById(int id)
@@ -88,14 +80,13 @@ namespace CallOfSokoHub
         {
             while (true)
             {
-                if (solverIsAlive && BulletList.Count > 0)
+                if (solverIsAlive)
                 {
-                    foreach (DataBullet bullet in BulletList)
-                    {
-                        bullet.Update();
-                    }
-                    entityUpdated?.Invoke(null, EventArgs.Empty);
-                    Thread.Sleep(20);
+                    Updater up;
+                    up = new Updater(PlayerList, BulletList);
+                    entityUpdated?.Invoke(up, EventArgs.Empty);
+                    if (BulletList.Count > 0) BulletList.Clear();
+                    Thread.Sleep(15);
                 }
             }
         }

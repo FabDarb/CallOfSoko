@@ -15,9 +15,9 @@
             Type = DataBlockType.Player;
         }
 
-        public override void Update()
-        {
+        //public override void Update()
+        //{
 
-        }
+        //}
     }
 }

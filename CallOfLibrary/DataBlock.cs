@@ -4,6 +4,7 @@
     {
         Wall,
         Player,
+        Bullet,
     }
     public class DataBlock
     {
@@ -21,7 +22,7 @@
             Type = type;
         }
 
-        virtual public void Update() { }
+        //virtual public void Update() { }
     }
 
 }

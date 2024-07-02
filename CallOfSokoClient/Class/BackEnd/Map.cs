@@ -34,10 +34,13 @@ namespace CallOfSokoClient.Class.BackEnd
             {
                 foreach (DataPlayer dataplayer in dataplayers)
                 {
-                    Player p = PlayerList.Where((player) => player.Id == dataplayer.Id).First()!;
-                    p.X = dataplayer.X;
-                    p.Y = dataplayer.Y;
-                    p.Angle = dataplayer.Angle;
+                    if (dataplayer.Id != MyUser.UserId)
+                    {
+                        Player p = PlayerList.Where((player) => player.Id == dataplayer.Id).First()!;
+                        p.X = dataplayer.X;
+                        p.Y = dataplayer.Y;
+                        p.Angle = dataplayer.Angle;
+                    }
                 }
             }
             else
@@ -52,23 +55,14 @@ namespace CallOfSokoClient.Class.BackEnd
             }
         }
 
-        public void UpdateShoot(List<DataBullet> dataBullets)
+        public void UpdateShoot(List<string> dataBullets)
         {
-            foreach (DataBullet databullet in dataBullets)
+            foreach (string databullet in dataBullets)
             {
-                Bullet? bu = BulletList.Where((bullet) => bullet.Id == databullet.Id).First();
-
-                if (bu != null)
-                {
-                    bu.X = databullet.X;
-                    bu.Y = databullet.Y;
-                }
-                else
-                {
-                    Bullet b = new Bullet(databullet.X, databullet.Y, databullet.IdPlayer, databullet.Id);
-                    BulletList.Add(b);
-                    MapDisplay.Add(b);
-                }
+                int[] data = CustomTryParse(databullet.Split(','));
+                Bullet b = new Bullet(data[1], data[2], data[0], data[3]);
+                BulletList.Add(b);
+                MapDisplay.Add(b);
             }
         }
 
@@ -92,6 +86,17 @@ namespace CallOfSokoClient.Class.BackEnd
                         break;
                 }
             }
+        }
+        private int[] CustomTryParse(string[] data)
+        {
+            int[] tab = new int[data.Length];
+            int i = 0;
+            foreach (string s in data)
+            {
+                tab[i] = int.Parse(s);
+                i++;
+            }
+            return tab;
         }
     }
 }

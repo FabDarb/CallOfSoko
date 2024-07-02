@@ -18,6 +18,8 @@ namespace CallOfSokoClient
 
         Thread displayThread;
 
+        System.Timers.Timer timer;
+
 
         public Form1()
         {
@@ -27,6 +29,26 @@ namespace CallOfSokoClient
             displayThread = new Thread(new ThreadStart(UIUpdater));
             displayThread.IsBackground = true;
             displayThread.Start();
+            timer = new System.Timers.Timer();
+            timer.Interval = 1000;
+            timer.Elapsed += Timer_Elapsed;
+            timer.Start();
+        }
+
+        private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            foreach (Bullet bullet in map.BulletList.ToImmutableList())
+            {
+                if (bullet.LifeTime > 0)
+                {
+                    --bullet.LifeTime;
+                }
+                else
+                {
+                    map.BulletList.Remove(bullet);
+                    map.MapDisplay.Remove(bullet);
+                }
+            }
         }
 
         private async void ConnectionToHub()
@@ -55,9 +77,13 @@ namespace CallOfSokoClient
                     map.CreateMap(datablocks);
 
                 });
-                connection?.On<List<DataPlayer>>("UpdatePossitionPlayer", (dataPlayer) =>
+                connection?.On<Updater>("Update", (updater) =>
                 {
-                    map.UpdateMap(dataPlayer, MyUser);
+                    map.UpdateMap(updater.Players, MyUser);
+                    if (updater.Bullets != null && updater.Bullets.Count > 0)
+                    {
+                        map.UpdateShoot(updater.Bullets);
+                    }
                     if (!map.IsInit)
                     {
                         map.IsInit = true;
@@ -66,10 +92,6 @@ namespace CallOfSokoClient
                 connection?.On<int>("JoiningConfirmed", (id) =>
                 {
                     MyUser.UserId = id;
-                });
-                connection?.On<List<DataBullet>>("UpdateShoot", (dataBullets) =>
-                {
-                    map.UpdateShoot(dataBullets);
                 });
             }
             catch (Exception ex)
