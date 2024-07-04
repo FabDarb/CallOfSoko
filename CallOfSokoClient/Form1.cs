@@ -160,24 +160,31 @@ namespace CallOfSokoClient
             }
         }
 
+        private void BulletCollision(Bullet b)
+        {
+            foreach (Player p in map.PlayerList)
+            {
+                if (TestCollision(p.HitBox, b.HitBox))
+                {
+                    if (p == map.ActualPlayer && b.IdPlayer != map.ActualPlayer!.Id)
+                    {
+                        map.ActualPlayer!.Health -= b.Damage;
+                    }
+                    if (p.Id != b.IdPlayer) map.RemoveBullet(b);
+                }
+            }
+        }
+
         private void MovementCollision()
         {
             foreach (Block block in map.MapDisplay.ToImmutableList())
             {
                 int xVel = MyUser.HorizontalVelocity;
                 int yVel = MyUser.VerticalVelocity;
+                if (block.GetType() == typeof(Bullet)) BulletCollision((Bullet)block);
                 if (map.ActualPlayer != block && TestCollision(map.ActualPlayer!.GetHitBox(xVel, yVel), block.HitBox))
                 {
-                    if (block.GetType() == typeof(Bullet))
-                    {
-                        Bullet b = (Bullet)block;
-                        if (b.IdPlayer != map.ActualPlayer.Id)
-                        {
-                            map.ActualPlayer!.Health -= b.Damage;
-                        }
-                        //map.RemoveBullet(b);
-                    }
-                    else
+                    if (block.GetType() != typeof(Bullet))
                     {
                         Player player = map.ActualPlayer!;
                         player.X += xVel;

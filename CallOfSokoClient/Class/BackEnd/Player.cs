@@ -11,10 +11,10 @@ namespace CallOfSokoClient.Class.BackEnd
         private int _Health;
         public int Health
         {
-            get => _X;
+            get => _Health;
             set
             {
-                _X = value;
+                _Health = value;
                 ViewLifeBar?.Invoke(value, EventArgs.Empty);
             }
         }
