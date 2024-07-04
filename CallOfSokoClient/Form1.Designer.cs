@@ -36,9 +36,10 @@
             // 
             // mainDisplay
             // 
-            mainDisplay.Location = new Point(0, 37);
+            mainDisplay.Dock = DockStyle.Fill;
+            mainDisplay.Location = new Point(0, 0);
             mainDisplay.Name = "mainDisplay";
-            mainDisplay.Size = new Size(800, 413);
+            mainDisplay.Size = new Size(800, 450);
             mainDisplay.TabIndex = 0;
             mainDisplay.TabStop = false;
             mainDisplay.Click += mainDisplay_Click;
@@ -47,7 +48,8 @@
             // 
             // LifePictureBox
             // 
-            LifePictureBox.Location = new Point(12, 8);
+            LifePictureBox.BackColor = Color.Transparent;
+            LifePictureBox.Location = new Point(12, 415);
             LifePictureBox.Name = "LifePictureBox";
             LifePictureBox.Size = new Size(776, 23);
             LifePictureBox.TabIndex = 1;

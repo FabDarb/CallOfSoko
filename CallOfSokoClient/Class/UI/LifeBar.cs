@@ -24,7 +24,7 @@
 
         public void Update(PaintEventArgs e)
         {
-            e.Graphics.FillRectangle(Brushes.Red, RectIn);
+            e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(40, 255, 0, 0)), RectIn);
             e.Graphics.DrawRectangle(Pens.Black, BorderRec);
         }
 
