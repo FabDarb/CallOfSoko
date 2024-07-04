@@ -117,7 +117,6 @@ namespace CallOfSokoClient
                 Thread.Sleep(20);
                 if (map.IsInit)
                 {
-                    MovementCollision();
                     foreach (var movementinput in MyUser.MovementInput.Values)
                     {
                         if (movementinput.IsActive)
@@ -135,6 +134,7 @@ namespace CallOfSokoClient
                             }
                         }
                     }
+                    MovementCollision();
                     map.PlayerMove(MyUser);
                     DataPlayer dp = new DataPlayer(map.ActualPlayer!.Id, map.ActualPlayer.X, map.ActualPlayer.Y, map.ActualPlayer.Angle);
                     connection?.InvokeAsync("PlayerMove", dp);
@@ -158,19 +158,19 @@ namespace CallOfSokoClient
 
                     if (top)
                     {
-                        map.ActualPlayer!.Y += MyUser.MovementInput[Keys.W].Velocity;
+                        MyUser.MovementInput[Keys.W].Velocity = 0;
                     }
                     if (bottom)
                     {
-                        map.ActualPlayer!.Y -= MyUser.MovementInput[Keys.S].Velocity;
+                        MyUser.MovementInput[Keys.S].Velocity = 0;
                     }
                     if (left)
                     {
-                        map.ActualPlayer!.X += MyUser.MovementInput[Keys.A].Velocity;
+                        MyUser.MovementInput[Keys.A].Velocity = 0;
                     }
                     if (right)
                     {
-                        map.ActualPlayer!.X -= MyUser.MovementInput[Keys.D].Velocity;
+                        MyUser.MovementInput[Keys.D].Velocity = 0;
                     }
                 }
             }
@@ -183,6 +183,7 @@ namespace CallOfSokoClient
                 MyUser.MovementInput[e.KeyCode].IsActive = true;
                 ++MyUser.IsMoving;
             }
+            if (e.KeyCode == Keys.R) { map.ActualPlayer!.Gun.Reload(); }
         }
 
 
@@ -204,7 +205,11 @@ namespace CallOfSokoClient
 
         private void mainDisplay_Click(object sender, EventArgs e)
         {
-            connection?.InvokeAsync("Shoot", MyUser.UserId);
+            Dictionary<string, int>? shot = map.ActualPlayer?.Gun.Shoot();
+            if (shot != null)
+            {
+                connection?.InvokeAsync("Shoot", MyUser.UserId, shot);
+            }
         }
 
         private void mainDisplay_MouseMove(object sender, MouseEventArgs e)

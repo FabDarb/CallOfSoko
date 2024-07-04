@@ -44,9 +44,9 @@ namespace CallOfSokoHub
             model.MovePlayerOnList(player);
         }
 
-        public void PlayerShoot(int userId)
+        public void PlayerShoot(int userId, Dictionary<string, int> shot)
         {
-            model.GenerateBullet(userId);
+            model.GenerateBullet(userId, shot);
         }
 
         private async void Update(object? sender, EventArgs e)

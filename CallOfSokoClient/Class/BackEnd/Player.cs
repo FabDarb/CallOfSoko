@@ -1,4 +1,5 @@
 ﻿using CallOfLibrary;
+using CallOfSokoClient.Class.Guns;
 namespace CallOfSokoClient.Class.BackEnd
 {
     public class Player : Block
@@ -6,13 +7,21 @@ namespace CallOfSokoClient.Class.BackEnd
         public int Id { get; set; }
         public int Angle { get; set; } = 0;
 
+        public Gun Gun { get; set; }
 
-        public Player(int x, int y, int angle, int id)
+        private int _X;
+        public new int X { get { return _X; } set { _X = value; HitBox = new Rectangle(value, Y, 25, 25); } }
+        private int _Y;
+        public new int Y { get { return _Y; } set { _Y = value; HitBox = new Rectangle(X, value, 25, 25); } }
+
+
+        public Player(int x, int y, int angle, int id, Gun gun)
         {
             X = x;
             Y = y;
             Id = id;
             Angle = angle;
+            Gun = gun;
             HitBox = new Rectangle(X, Y, 25, 25);
             Type = DataBlockType.Player;
         }
@@ -32,6 +41,7 @@ namespace CallOfSokoClient.Class.BackEnd
             e.Graphics.RotateTransform(Angle);
             e.Graphics.FillRectangle(brush, -(25 / 2), -(25 / 2), 25, 25);
             e.Graphics.ResetTransform();
+            e.Graphics.FillRectangle(Brushes.Black, HitBox.X, HitBox.Y, 25, 25);
         }
     }
 }

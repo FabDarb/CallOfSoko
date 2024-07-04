@@ -54,12 +54,12 @@ namespace CallOfSokoHub
             dp.Angle = player.Angle;
         }
 
-        public void GenerateBullet(int userId)
+        public void GenerateBullet(int userId, Dictionary<string, int> shot)
         {
             DataPlayer? player = FindPlayerById(userId);
             if (player != null)
             {
-                BulletList.Add($"{player.Id},{player.X},{player.Y},{player.Angle}");
+                BulletList.Add($"{player.Id},{player.X},{player.Y},{player.Angle},{shot["Damage"]},{shot["BulletSpeed"]},{shot["BulletLifeTime"]}");
                 Console.WriteLine($"angle: {player.Angle}");
             }
         }

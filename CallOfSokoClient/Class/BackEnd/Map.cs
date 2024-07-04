@@ -1,4 +1,5 @@
 ﻿using CallOfLibrary;
+using CallOfSokoClient.Class.Guns;
 
 namespace CallOfSokoClient.Class.BackEnd
 {
@@ -47,7 +48,7 @@ namespace CallOfSokoClient.Class.BackEnd
             {
                 foreach (DataPlayer dataplayer in dataplayers)
                 {
-                    Player p = new Player(dataplayer.X, dataplayer.Y, dataplayer.Angle, dataplayer.Id);
+                    Player p = new Player(dataplayer.X, dataplayer.Y, dataplayer.Angle, dataplayer.Id, new Glock17());
                     PlayerList.Add(p);
                     MapDisplay.Add(p);
                     if (p.Id == MyUser.UserId) ActualPlayer = p;
@@ -60,7 +61,7 @@ namespace CallOfSokoClient.Class.BackEnd
             foreach (string databullet in dataBullets)
             {
                 int[] data = CustomTryParse(databullet.Split(','));
-                Bullet b = new Bullet(data[1], data[2], data[0], data[3]);
+                Bullet b = new Bullet(data[1], data[2], data[0], data[3], data[4], data[5], data[6]);
                 BulletList.Add(b);
                 MapDisplay.Add(b);
             }

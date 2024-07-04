@@ -15,9 +15,9 @@ namespace CallOfSokoHub
         {
             mainGameProcess.PlayerMove(player);
         }
-        public void Shoot(int userId)
+        public void Shoot(int userId, Dictionary<string, int> shot)
         {
-            mainGameProcess.PlayerShoot(userId);
+            mainGameProcess.PlayerShoot(userId, shot);
         }
     }
 }
