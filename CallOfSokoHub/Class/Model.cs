@@ -4,6 +4,9 @@ namespace CallOfSokoHub
 {
     public class Model
     {
+
+        public const int Width = 15;
+        public const int Height = 8;
         public List<DataBlock> Map { get; set; }
         public List<DataPlayer> PlayerList { get; set; }
         public List<string> BulletList { get; set; }
@@ -24,8 +27,8 @@ namespace CallOfSokoHub
 
         public void GeneratePlayers(List<User> users)
         {
-            int x = 0;
-            int y = 0;
+            int x = 100;
+            int y = 100;
             foreach (var user in users)
             {
                 PlayerList.Add(new DataPlayer(user.Id, x, y, 0));
@@ -34,7 +37,20 @@ namespace CallOfSokoHub
             }
         }
 
-        public void UseTemplateMap()
+        public void WorldGeneration(bool useTemplate = false)
+        {
+            Map.Clear();
+            if (useTemplate)
+            {
+                UseTemplateMap();
+            }
+            else
+            {
+                GenerateWorld();
+            }
+        }
+
+        private void UseTemplateMap()
         {
             Map.Clear();
             Map.Add(new DataBlock(200, 50, DataBlockType.Wall));
@@ -61,6 +77,25 @@ namespace CallOfSokoHub
             {
                 BulletList.Add($"{player.Id},{player.X},{player.Y},{player.Angle},{shot["Damage"]},{shot["BulletSpeed"]},{shot["BulletLifeTime"]}");
                 Console.WriteLine($"angle: {player.Angle}");
+            }
+        }
+
+        private void GenerateWorld()
+        {
+            GenerateBorder();
+        }
+
+        private void GenerateBorder()
+        {
+            for (int i = 0; i <= Width; i++)
+            {
+                for (int j = 0; j <= Height; j++)
+                {
+                    if (i == 0 || j == 0 || i == Width || j == Height)
+                    {
+                        Map.Add(new DataBlock(i * 50, j * 50, DataBlockType.Wall));
+                    }
+                }
             }
         }
 

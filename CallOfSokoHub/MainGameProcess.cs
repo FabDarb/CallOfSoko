@@ -31,7 +31,7 @@ namespace CallOfSokoHub
 
         public void SendMap()
         {
-            model.UseTemplateMap();
+            model.WorldGeneration();
             model.GeneratePlayers(Users.Values.ToList());
             foreach (var user in Users.Values)
             {
