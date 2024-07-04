@@ -4,16 +4,18 @@
     {
         public int UserId { get; set; }
         public int IsMoving { get; set; } = 0;
+        public int VerticalVelocity { get; set; } = 0;
+        public int HorizontalVelocity { get; set; } = 0;
 
-        public Dictionary<Keys, MovementInputVelocity> MovementInput { get; set; }
+        public Dictionary<Keys, bool> MovementInput { get; set; }
 
         public User()
         {
-            MovementInput = new Dictionary<Keys, MovementInputVelocity>();
-            MovementInput.Add(Keys.W, new MovementInputVelocity());
-            MovementInput.Add(Keys.D, new MovementInputVelocity());
-            MovementInput.Add(Keys.S, new MovementInputVelocity());
-            MovementInput.Add(Keys.A, new MovementInputVelocity());
+            MovementInput = new Dictionary<Keys, bool>();
+            MovementInput.Add(Keys.W, false);
+            MovementInput.Add(Keys.D, false);
+            MovementInput.Add(Keys.S, false);
+            MovementInput.Add(Keys.A, false);
         }
 
     }

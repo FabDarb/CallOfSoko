@@ -69,24 +69,8 @@ namespace CallOfSokoClient.Class.BackEnd
 
         public void PlayerMove(User MyUser)
         {
-            foreach (Keys input in MyUser.MovementInput.Keys)
-            {
-                switch (input)
-                {
-                    case Keys.W:
-                        if (MyUser.MovementInput[input].IsActive) ActualPlayer!.Y -= MyUser.MovementInput[input].Velocity;
-                        break;
-                    case Keys.S:
-                        if (MyUser.MovementInput[input].IsActive) ActualPlayer!.Y += MyUser.MovementInput[input].Velocity;
-                        break;
-                    case Keys.D:
-                        if (MyUser.MovementInput[input].IsActive) ActualPlayer!.X += MyUser.MovementInput[input].Velocity;
-                        break;
-                    case Keys.A:
-                        if (MyUser.MovementInput[input].IsActive) ActualPlayer!.X -= MyUser.MovementInput[input].Velocity;
-                        break;
-                }
-            }
+            ActualPlayer!.X += MyUser.HorizontalVelocity;
+            ActualPlayer!.Y += MyUser.VerticalVelocity;
         }
         private int[] CustomTryParse(string[] data)
         {

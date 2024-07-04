@@ -10,7 +10,7 @@ namespace CallOfSokoClient
     public partial class Form1 : Form
     {
         public User MyUser { get; set; }
-        public const int MaxPlayerVelocity = 5;
+        public const int MaxPlayerVelocity = 2;
 
         Map map = Map.Instance;
 
@@ -117,60 +117,61 @@ namespace CallOfSokoClient
                 Thread.Sleep(20);
                 if (map.IsInit)
                 {
-                    foreach (var movementinput in MyUser.MovementInput.Values)
+                    foreach (var movementinput in MyUser.MovementInput)
                     {
-                        if (movementinput.IsActive)
+                        if (movementinput.Value)
                         {
-                            if (movementinput.Velocity < MaxPlayerVelocity)
+                            switch (movementinput.Key)
                             {
-                                ++movementinput.Velocity;
+                                case Keys.W: if (Math.Abs(MyUser.VerticalVelocity) < MaxPlayerVelocity) --MyUser.VerticalVelocity; break;
+                                case Keys.S: if (Math.Abs(MyUser.VerticalVelocity) < MaxPlayerVelocity) ++MyUser.VerticalVelocity; break;
+                                case Keys.A: if (Math.Abs(MyUser.HorizontalVelocity) < MaxPlayerVelocity) --MyUser.HorizontalVelocity; break;
+                                case Keys.D: if (Math.Abs(MyUser.HorizontalVelocity) < MaxPlayerVelocity) ++MyUser.HorizontalVelocity; break;
                             }
                         }
                         else
                         {
-                            if (movementinput.Velocity > 0)
+                            switch (movementinput.Key)
                             {
-                                --movementinput.Velocity;
+                                case Keys.W: if (MyUser.VerticalVelocity < 0) ++MyUser.VerticalVelocity; break;
+                                case Keys.S: if (MyUser.VerticalVelocity > 0) --MyUser.VerticalVelocity; break;
+                                case Keys.A: if (MyUser.HorizontalVelocity < 0) ++MyUser.HorizontalVelocity; break;
+                                case Keys.D: if (MyUser.HorizontalVelocity > 0) --MyUser.HorizontalVelocity; break;
                             }
                         }
+                        MovementCollision();
+                        map.PlayerMove(MyUser);
+                        DataPlayer dp = new DataPlayer(map.ActualPlayer!.Id, map.ActualPlayer.X, map.ActualPlayer.Y, map.ActualPlayer.Angle);
+                        connection?.InvokeAsync("PlayerMove", dp);
                     }
-                    MovementCollision();
-                    map.PlayerMove(MyUser);
-                    DataPlayer dp = new DataPlayer(map.ActualPlayer!.Id, map.ActualPlayer.X, map.ActualPlayer.Y, map.ActualPlayer.Angle);
-                    connection?.InvokeAsync("PlayerMove", dp);
-                }
 
+                }
             }
         }
-
 
         private void MovementCollision()
         {
             foreach (Block block in map.MapDisplay.ToImmutableList())
             {
-                if (map.ActualPlayer != block && TestCollision(map.ActualPlayer!.HitBox, block.HitBox))
+                int x = MyUser.HorizontalVelocity;
+                int y = MyUser.VerticalVelocity;
+                if (map.ActualPlayer != block && TestCollision(map.ActualPlayer!.GetHitBox(), block.HitBox))
                 {
-                    var intersection = Rectangle.Intersect(map.ActualPlayer!.HitBox, block.HitBox);
+                    var intersection = Rectangle.Intersect(map.ActualPlayer!.GetHitBox(), block.HitBox);
                     bool top = intersection.Top == map.ActualPlayer!.HitBox.Top;
                     bool bottom = intersection.Bottom == map.ActualPlayer!.HitBox.Bottom;
                     bool left = intersection.Left == map.ActualPlayer!.HitBox.Left;
                     bool right = intersection.Right == map.ActualPlayer!.HitBox.Right;
 
-                    if (top)
+                    if (top || bottom)
                     {
-                        MyUser.MovementInput[Keys.W].Velocity = 0;
+                        map.ActualPlayer.Y -= MyUser.VerticalVelocity;
+                        MyUser.VerticalVelocity = 0;
                     }
-                    if (bottom)
+                    if (left || right)
                     {
-                        MyUser.MovementInput[Keys.S].Velocity = 0;
-                    }
-                    if (left)
-                    {
-                        MyUser.MovementInput[Keys.A].Velocity = 0;
-                    }
-                    if (right)
-                    {
-                        MyUser.MovementInput[Keys.D].Velocity = 0;
+                        map.ActualPlayer.X -= MyUser.HorizontalVelocity;
+                        MyUser.HorizontalVelocity = 0;
                     }
                 }
             }
@@ -180,7 +181,7 @@ namespace CallOfSokoClient
         {
             if (MyUser.MovementInput.ContainsKey(e.KeyCode))
             {
-                MyUser.MovementInput[e.KeyCode].IsActive = true;
+                MyUser.MovementInput[e.KeyCode] = true;
                 ++MyUser.IsMoving;
             }
             if (e.KeyCode == Keys.R) { map.ActualPlayer!.Gun.Reload(); }
@@ -191,7 +192,7 @@ namespace CallOfSokoClient
         {
             if (MyUser.MovementInput.ContainsKey(e.KeyCode))
             {
-                MyUser.MovementInput[e.KeyCode].IsActive = false;
+                MyUser.MovementInput[e.KeyCode] = false;
                 --MyUser.IsMoving;
             }
         }

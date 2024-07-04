@@ -26,6 +26,16 @@ namespace CallOfSokoClient.Class.BackEnd
             Type = DataBlockType.Player;
         }
 
+        public Rectangle GetHitBox()
+        {
+            Rectangle hitBox = new Rectangle();
+            hitBox.X = HitBox.X;
+            hitBox.Y = HitBox.Y;
+            hitBox.Width = HitBox.Width;
+            hitBox.Height = HitBox.Height;
+            return hitBox;
+        }
+
         public override void DrawBlock(PaintEventArgs e, PictureBox display)
         {
             Brush brush;
