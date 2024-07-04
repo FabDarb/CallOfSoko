@@ -39,11 +39,11 @@ namespace CallOfSokoClient.Class.BackEnd
             Type = DataBlockType.Player;
         }
 
-        public Rectangle GetHitBox()
+        public Rectangle GetHitBox(int xVelocity, int yVelocity)
         {
             Rectangle hitBox = new Rectangle();
-            hitBox.X = HitBox.X;
-            hitBox.Y = HitBox.Y;
+            hitBox.X = HitBox.X + xVelocity;
+            hitBox.Y = HitBox.Y + yVelocity;
             hitBox.Width = HitBox.Width;
             hitBox.Height = HitBox.Height;
             return hitBox;

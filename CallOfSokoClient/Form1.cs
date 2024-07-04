@@ -165,9 +165,9 @@ namespace CallOfSokoClient
         {
             foreach (Block block in map.MapDisplay.ToImmutableList())
             {
-                int x = MyUser.HorizontalVelocity;
-                int y = MyUser.VerticalVelocity;
-                if (map.ActualPlayer != block && TestCollision(map.ActualPlayer!.GetHitBox(), block.HitBox))
+                int xVel = MyUser.HorizontalVelocity;
+                int yVel = MyUser.VerticalVelocity;
+                if (map.ActualPlayer != block && TestCollision(map.ActualPlayer!.GetHitBox(xVel, yVel), block.HitBox))
                 {
                     if (block.GetType() == typeof(Bullet))
                     {
@@ -179,22 +179,32 @@ namespace CallOfSokoClient
                     }
                     else
                     {
-                        var intersection = Rectangle.Intersect(map.ActualPlayer!.HitBox, block.HitBox);
+                        Player player = map.ActualPlayer!;
+                        player.X += xVel;
+                        player.Y += yVel;
+                        var intersection = Rectangle.Intersect(player.HitBox, block.HitBox);
                         bool top = intersection.Top == map.ActualPlayer!.HitBox.Top;
                         bool bottom = intersection.Bottom == map.ActualPlayer!.HitBox.Bottom;
                         bool left = intersection.Left == map.ActualPlayer!.HitBox.Left;
                         bool right = intersection.Right == map.ActualPlayer!.HitBox.Right;
-
-                        if (top || bottom)
+                        if (top)
                         {
-                            map.ActualPlayer.Y -= MyUser.VerticalVelocity;
                             MyUser.VerticalVelocity = 0;
                         }
-                        if (left || right)
+                        if (bottom)
                         {
-                            map.ActualPlayer.X -= MyUser.HorizontalVelocity;
+                            MyUser.VerticalVelocity = 0;
+                        }
+                        if (left)
+                        {
                             MyUser.HorizontalVelocity = 0;
                         }
+                        if (right)
+                        {
+                            MyUser.HorizontalVelocity = 0;
+                        }
+                        player.X -= xVel;
+                        player.Y -= yVel;
                     }
                 }
             }
