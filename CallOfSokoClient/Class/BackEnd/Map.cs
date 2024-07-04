@@ -52,8 +52,8 @@ namespace CallOfSokoClient.Class.BackEnd
                     Player p = new Player(dataplayer.X, dataplayer.Y, dataplayer.Angle, dataplayer.Id, new Glock17(), 100);
                     PlayerList.Add(p);
                     MapDisplay.Add(p);
-                    p.ViewLifeBar += P_ViewLifeBar;
                     if (p.Id == MyUser.UserId) ActualPlayer = p;
+                    p.ViewLifeBar += P_ViewLifeBar;
                 }
             }
         }
@@ -89,6 +89,12 @@ namespace CallOfSokoClient.Class.BackEnd
                 i++;
             }
             return tab;
+        }
+
+        public void RemoveBullet(Bullet b)
+        {
+            BulletList.Remove(b);
+            MapDisplay?.Remove(b);
         }
     }
 }

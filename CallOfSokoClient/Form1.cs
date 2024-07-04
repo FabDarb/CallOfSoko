@@ -47,8 +47,7 @@ namespace CallOfSokoClient
                 }
                 else
                 {
-                    map.BulletList.Remove(bullet);
-                    map.MapDisplay.Remove(bullet);
+                    map.RemoveBullet(bullet);
                 }
             }
         }
@@ -176,6 +175,7 @@ namespace CallOfSokoClient
                         {
                             map.ActualPlayer!.Health -= b.Damage;
                         }
+                        //map.RemoveBullet(b);
                     }
                     else
                     {
