@@ -6,22 +6,35 @@ namespace CallOfSokoClient.Class.BackEnd
     {
         public int Id { get; set; }
         public int Angle { get; set; } = 0;
-
         public Gun Gun { get; set; }
+
+        private int _Health;
+        public int Health
+        {
+            get => _X;
+            set
+            {
+                _X = value;
+                ViewLifeBar?.Invoke(_X, EventArgs.Empty);
+            }
+        }
 
         private int _X;
         public new int X { get { return _X; } set { _X = value; HitBox = new Rectangle(value, Y, 25, 25); } }
         private int _Y;
         public new int Y { get { return _Y; } set { _Y = value; HitBox = new Rectangle(X, value, 25, 25); } }
 
+        public event EventHandler? ViewLifeBar;
 
-        public Player(int x, int y, int angle, int id, Gun gun)
+
+        public Player(int x, int y, int angle, int id, Gun gun, int health)
         {
             X = x;
             Y = y;
             Id = id;
             Angle = angle;
             Gun = gun;
+            Health = health;
             HitBox = new Rectangle(X, Y, 25, 25);
             Type = DataBlockType.Player;
         }

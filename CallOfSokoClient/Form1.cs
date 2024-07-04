@@ -1,5 +1,6 @@
 using CallOfLibrary;
 using CallOfSokoClient.Class.BackEnd;
+using CallOfSokoClient.Class.UI;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Collections.Immutable;
 using System.Configuration;
@@ -19,6 +20,7 @@ namespace CallOfSokoClient
         Thread displayThread;
 
         System.Timers.Timer timer;
+        LifeBar? HealthViewer { get; set; }
 
 
         public Form1()
@@ -87,6 +89,9 @@ namespace CallOfSokoClient
                     if (!map.IsInit)
                     {
                         map.IsInit = true;
+                        HealthViewer = new LifeBar(map.ActualPlayer!.Health);
+                        map.UpdateLife += Map_UpdateLife;
+                        LifePictureBox.Invalidate();
                     }
                 });
                 connection?.On<int>("JoiningConfirmed", (id) =>
@@ -101,6 +106,13 @@ namespace CallOfSokoClient
 
 
         }
+
+        private void Map_UpdateLife(object? sender, EventArgs e)
+        {
+            HealthViewer!.PlayerLife = map.ActualPlayer!.Health;
+            LifePictureBox.Invalidate();
+        }
+
         private void mainDisplay_Paint(object sender, PaintEventArgs e)
         {
             foreach (Block block in map.MapDisplay.ToImmutableList())
@@ -150,27 +162,38 @@ namespace CallOfSokoClient
             {
                 if (map.ActualPlayer != block && TestCollision(map.ActualPlayer!.HitBox, block.HitBox))
                 {
-                    var intersection = Rectangle.Intersect(map.ActualPlayer!.HitBox, block.HitBox);
-                    bool top = intersection.Top == map.ActualPlayer!.HitBox.Top;
-                    bool bottom = intersection.Bottom == map.ActualPlayer!.HitBox.Bottom;
-                    bool left = intersection.Left == map.ActualPlayer!.HitBox.Left;
-                    bool right = intersection.Right == map.ActualPlayer!.HitBox.Right;
+                    if (block.GetType() == typeof(Bullet))
+                    {
+                        Bullet b = (Bullet)block;
+                        if (b.IdPlayer != map.ActualPlayer.Id)
+                        {
+                            map.ActualPlayer!.Health -= b.Damage;
+                        }
+                    }
+                    else
+                    {
+                        var intersection = Rectangle.Intersect(map.ActualPlayer!.HitBox, block.HitBox);
+                        bool top = intersection.Top == map.ActualPlayer!.HitBox.Top;
+                        bool bottom = intersection.Bottom == map.ActualPlayer!.HitBox.Bottom;
+                        bool left = intersection.Left == map.ActualPlayer!.HitBox.Left;
+                        bool right = intersection.Right == map.ActualPlayer!.HitBox.Right;
 
-                    if (top)
-                    {
-                        MyUser.MovementInput[Keys.W].Velocity = 0;
-                    }
-                    if (bottom)
-                    {
-                        MyUser.MovementInput[Keys.S].Velocity = 0;
-                    }
-                    if (left)
-                    {
-                        MyUser.MovementInput[Keys.A].Velocity = 0;
-                    }
-                    if (right)
-                    {
-                        MyUser.MovementInput[Keys.D].Velocity = 0;
+                        if (top)
+                        {
+                            MyUser.MovementInput[Keys.W].Velocity = 0;
+                        }
+                        if (bottom)
+                        {
+                            MyUser.MovementInput[Keys.S].Velocity = 0;
+                        }
+                        if (left)
+                        {
+                            MyUser.MovementInput[Keys.A].Velocity = 0;
+                        }
+                        if (right)
+                        {
+                            MyUser.MovementInput[Keys.D].Velocity = 0;
+                        }
                     }
                 }
             }
@@ -218,6 +241,15 @@ namespace CallOfSokoClient
             {
                 int angle = (int)Math.Round(Math.Atan2((e.Y - map.ActualPlayer!.Y), e.X - map.ActualPlayer!.X) * 180 / Math.PI);
                 map.ActualPlayer!.Angle = angle;
+            }
+        }
+
+        private void LifePictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            Debug.WriteLine("Called");
+            if (map.IsInit)
+            {
+                HealthViewer!.Update(e);
             }
         }
     }

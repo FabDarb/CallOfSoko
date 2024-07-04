@@ -14,6 +14,7 @@ namespace CallOfSokoClient.Class.BackEnd
         static public Map Instance { get; } = new Map();
 
         public bool IsInit { get; set; } = false;
+        public event EventHandler? UpdateLife;
 
 
         public void CreateMap(List<DataBlock> datablocks)
@@ -48,12 +49,18 @@ namespace CallOfSokoClient.Class.BackEnd
             {
                 foreach (DataPlayer dataplayer in dataplayers)
                 {
-                    Player p = new Player(dataplayer.X, dataplayer.Y, dataplayer.Angle, dataplayer.Id, new Glock17());
+                    Player p = new Player(dataplayer.X, dataplayer.Y, dataplayer.Angle, dataplayer.Id, new Glock17(), 100);
                     PlayerList.Add(p);
                     MapDisplay.Add(p);
+                    p.ViewLifeBar += P_ViewLifeBar;
                     if (p.Id == MyUser.UserId) ActualPlayer = p;
                 }
             }
+        }
+
+        private void P_ViewLifeBar(object? sender, EventArgs e)
+        {
+            UpdateLife?.Invoke(sender, EventArgs.Empty);
         }
 
         public void UpdateShoot(List<string> dataBullets)

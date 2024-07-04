@@ -29,37 +29,50 @@
         private void InitializeComponent()
         {
             mainDisplay = new PictureBox();
+            LifePictureBox = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)mainDisplay).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)LifePictureBox).BeginInit();
             SuspendLayout();
             // 
             // mainDisplay
             // 
-            mainDisplay.Dock = DockStyle.Fill;
-            mainDisplay.Location = new Point(0, 0);
+            mainDisplay.Location = new Point(0, 37);
             mainDisplay.Name = "mainDisplay";
-            mainDisplay.Size = new Size(800, 450);
+            mainDisplay.Size = new Size(800, 413);
             mainDisplay.TabIndex = 0;
             mainDisplay.TabStop = false;
             mainDisplay.Click += mainDisplay_Click;
             mainDisplay.Paint += mainDisplay_Paint;
             mainDisplay.MouseMove += mainDisplay_MouseMove;
             // 
+            // LifePictureBox
+            // 
+            LifePictureBox.Location = new Point(12, 8);
+            LifePictureBox.Name = "LifePictureBox";
+            LifePictureBox.Size = new Size(776, 23);
+            LifePictureBox.TabIndex = 1;
+            LifePictureBox.TabStop = false;
+            LifePictureBox.Paint += LifePictureBox_Paint;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(LifePictureBox);
             Controls.Add(mainDisplay);
             Name = "Form1";
             Text = "Form1";
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
             ((System.ComponentModel.ISupportInitialize)mainDisplay).EndInit();
+            ((System.ComponentModel.ISupportInitialize)LifePictureBox).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private PictureBox mainDisplay;
+        private PictureBox LifePictureBox;
     }
 }
