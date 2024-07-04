@@ -15,7 +15,7 @@ namespace CallOfSokoClient.Class.BackEnd
             set
             {
                 _X = value;
-                ViewLifeBar?.Invoke(_X, EventArgs.Empty);
+                ViewLifeBar?.Invoke(value, EventArgs.Empty);
             }
         }
 
