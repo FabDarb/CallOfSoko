@@ -160,17 +160,20 @@ namespace CallOfSokoClient
             }
         }
 
-        private void BulletCollision(Bullet b)
+        private void BulletCollision(Block block)
         {
-            foreach (Player p in map.PlayerList)
+            foreach (Bullet b in map.BulletList.ToImmutableList())
             {
-                if (TestCollision(p.HitBox, b.HitBox))
+                if (TestCollision(b.HitBox, block.HitBox))
                 {
-                    if (p == map.ActualPlayer && b.IdPlayer != map.ActualPlayer!.Id)
+                    if (block.GetType() == typeof(Player) && (Player)block == map.ActualPlayer && map.ActualPlayer!.Id != b.IdPlayer)
                     {
-                        map.ActualPlayer!.Health -= b.Damage;
+                        map.ActualPlayer.Health -= b.Damage;
                     }
-                    if (p.Id != b.IdPlayer) map.RemoveBullet(b);
+                    if (block.GetType() == typeof(Wall) || (block.GetType() == typeof(Player) && ((Player)block).Id != b.IdPlayer))
+                    {
+                        map.RemoveBullet(b);
+                    }
                 }
             }
         }
@@ -181,7 +184,7 @@ namespace CallOfSokoClient
             {
                 int xVel = MyUser.HorizontalVelocity;
                 int yVel = MyUser.VerticalVelocity;
-                if (block.GetType() == typeof(Bullet)) BulletCollision((Bullet)block);
+                if (block.GetType() != typeof(Bullet)) BulletCollision(block);
                 if (map.ActualPlayer != block && TestCollision(map.ActualPlayer!.GetHitBox(xVel, yVel), block.HitBox))
                 {
                     if (block.GetType() != typeof(Bullet))
