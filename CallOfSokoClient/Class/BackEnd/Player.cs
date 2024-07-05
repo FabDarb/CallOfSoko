@@ -8,8 +8,11 @@ namespace CallOfSokoClient.Class.BackEnd
         public int Angle { get; set; } = 0;
         public Gun Gun { get; set; }
         public bool InRealoding { get; set; } = false;
+        public bool IsHited { get; set; }
 
         public event EventHandler? IsDead;
+        public Brush DefaultBrush { get; set; }
+        public Brush PlayerBrush { get; set; }
 
         private int _Health;
         public int Health
@@ -44,6 +47,15 @@ namespace CallOfSokoClient.Class.BackEnd
             Health = health;
             HitBox = new Rectangle(X, Y, 25, 25);
             Type = DataBlockType.Player;
+            if (Id == 0)
+            {
+                DefaultBrush = Brushes.Green;
+            }
+            else
+            {
+                DefaultBrush = Brushes.Indigo;
+            }
+            PlayerBrush = DefaultBrush;
         }
 
         public Rectangle GetHitBox(int xVelocity, int yVelocity)
@@ -58,18 +70,10 @@ namespace CallOfSokoClient.Class.BackEnd
 
         public override void DrawBlock(PaintEventArgs e, PictureBox display)
         {
-            Brush brush;
-            if (Id == 0)
-            {
-                brush = Brushes.Green;
-            }
-            else
-            {
-                brush = Brushes.Indigo;
-            }
+
             e.Graphics.TranslateTransform(X + 25 / 2, Y + 25 / 2);
             e.Graphics.RotateTransform(Angle);
-            e.Graphics.FillRectangle(brush, -(25 / 2), -(25 / 2), 25, 25);
+            e.Graphics.FillRectangle(PlayerBrush, -(25 / 2), -(25 / 2), 25, 25);
             e.Graphics.ResetTransform();
         }
     }

@@ -76,6 +76,20 @@ namespace CallOfSokoClient
                         RealodingBarViewer.Width = mainDisplay.Width - RealodingBarViewer.X;
                     }
                 }
+                foreach (Player player in map.PlayerList.ToList())
+                {
+                    if (player.IsHited)
+                    {
+                        player.IsHited = false;
+                    }
+                    else
+                    {
+                        if (player.PlayerBrush != player.DefaultBrush)
+                        {
+                            player.PlayerBrush = player.DefaultBrush;
+                        }
+                    }
+                }
             }
         }
 
@@ -223,6 +237,11 @@ namespace CallOfSokoClient
                         if (block.GetType() == typeof(Wall) || (block.GetType() == typeof(Player) && ((Player)block).Id != b.IdPlayer))
                         {
                             map.RemoveBullet(b);
+                        }
+                        if (block.GetType() == typeof(Player) && b.IdPlayer != ((Player)block).Id)
+                        {
+                            ((Player)block).IsHited = true;
+                            ((Player)block).PlayerBrush = Brushes.Red;
                         }
                     }
                 }
