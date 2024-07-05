@@ -226,7 +226,7 @@ namespace CallOfSokoClient
         {
             lock (map.BulletList)
             {
-                foreach (Bullet b in map.BulletList.ToList())
+                foreach (Bullet b in map.BulletList)
                 {
                     if (b != null)
                     {
