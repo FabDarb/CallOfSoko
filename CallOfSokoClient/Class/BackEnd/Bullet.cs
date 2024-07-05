@@ -34,7 +34,7 @@ namespace CallOfSokoClient
             vector.Rotate(Speed, Angle);
             X = vector.X;
             Y = vector.Y;
-            e.Graphics.FillEllipse(Brushes.DarkGray, X, Y, 5, 5);
+            e.Graphics.FillEllipse(Brushes.DarkGreen, X, Y, 5, 5);
         }
     }
 }
