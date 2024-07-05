@@ -224,7 +224,7 @@ namespace CallOfSokoClient
 
         private void BulletCollision(Block block)
         {
-            var workBulletList = map.BulletList.ToList();
+            var workBulletList = map.BulletList.ToImmutableList();
             lock (workBulletList)
             {
                 foreach (Bullet b in workBulletList)
@@ -237,12 +237,13 @@ namespace CallOfSokoClient
                             {
                                 map.ActualPlayer.Health -= b.Damage;
                             }
-                            if (block.GetType() == typeof(Wall) || (block.GetType() == typeof(Player) && ((Player)block).Id != b.IdPlayer))
+                            if (block.GetType() == typeof(Wall) || (block.GetType() == typeof(Player) && ((Player)block).Id != b.IdPlayer)) d
                             {
                                 map.RemoveBullet(b);
                             }
                             if (block.GetType() == typeof(Player) && b.IdPlayer != ((Player)block).Id)
                             {
+                                a
                                 ((Player)block).IsHited = true;
                                 ((Player)block).PlayerBrush = Brushes.Red;
                             }
