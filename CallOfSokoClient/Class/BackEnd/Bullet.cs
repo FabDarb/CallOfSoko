@@ -1,5 +1,4 @@
 ﻿using CallOfLibrary;
-using System.Diagnostics;
 
 namespace CallOfSokoClient
 {
@@ -35,15 +34,7 @@ namespace CallOfSokoClient
             vector.Rotate(Speed, Angle);
             X = vector.X;
             Y = vector.Y;
-            Debuging();
             e.Graphics.FillEllipse(Brushes.DarkGray, X, Y, 5, 5);
-        }
-
-        private void Debuging()
-        {
-            Debug.WriteLine($"X: {X}");
-            Debug.WriteLine($"Y: {Y}");
-            Debug.WriteLine($"angle: {Angle}");
         }
     }
 }

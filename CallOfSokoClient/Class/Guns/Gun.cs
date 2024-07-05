@@ -7,6 +7,8 @@
         public int Ammo { get; set; }
         public int BulletSpeed { get; set; }
         public int BulletLifeTime { get; set; }
+        public int RealodingTime { get; set; }
+        public int InRealoding { get; set; }
 
         public Dictionary<string, int>? Shoot()
         {
@@ -20,7 +22,7 @@
 
         public bool TestIfShoot()
         {
-            if (Ammo >= 0) return true;
+            if (Ammo > 0) return true;
             return false;
         }
         public void Reload()

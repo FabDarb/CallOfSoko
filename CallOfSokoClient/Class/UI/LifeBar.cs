@@ -1,10 +1,7 @@
 ﻿namespace CallOfSokoClient.Class.UI
 {
-    public class LifeBar
+    public class LifeBar : BarUI
     {
-        Rectangle BorderRec { get; set; }
-        Rectangle RectIn { get; set; }
-
         private int _PlayerLife;
         public int PlayerLife
         {
@@ -22,9 +19,9 @@
             RectIn = new Rectangle(0, 0, width, 15);
         }
 
-        public void Update(PaintEventArgs e)
+        public override void Update(PaintEventArgs e)
         {
-            e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(40, 255, 0, 0)), RectIn);
+            e.Graphics.FillRectangle(Brushes.Red, RectIn);
             e.Graphics.DrawRectangle(Pens.Black, BorderRec);
         }
 

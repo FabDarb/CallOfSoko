@@ -1,5 +1,6 @@
 using CallOfLibrary;
 using CallOfSokoClient.Class.BackEnd;
+using CallOfSokoClient.Class.Guns;
 using CallOfSokoClient.Class.UI;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Collections.Immutable;
@@ -21,6 +22,10 @@ namespace CallOfSokoClient
 
         System.Timers.Timer timer;
         LifeBar? HealthViewer { get; set; }
+
+        AmmoBar? AmmoBarViewer { get; set; }
+
+        RealodingBar? RealodingBarViewer { get; set; }
 
 
         public Form1()
@@ -48,6 +53,28 @@ namespace CallOfSokoClient
                 else
                 {
                     map.RemoveBullet(bullet);
+                }
+            }
+            if (map.IsInit)
+            {
+                if (map.ActualPlayer!.InRealoding)
+                {
+                    Gun g = map.ActualPlayer!.Gun;
+                    if (g.InRealoding <= 0)
+                    {
+                        map.ActualPlayer!.InRealoding = false;
+                        g.InRealoding = g.RealodingTime;
+                        g.Reload();
+                        AmmoBarViewer!.UpdateAmmo(g.Ammo);
+                        RealodingBarViewer!.X = mainDisplay.Width;
+                        RealodingBarViewer.Width = 0;
+                    }
+                    else
+                    {
+                        --g.InRealoding;
+                        RealodingBarViewer!.X -= RealodingBarViewer.TickUpdater;
+                        RealodingBarViewer.Width = mainDisplay.Width - RealodingBarViewer.X;
+                    }
                 }
             }
         }
@@ -89,8 +116,9 @@ namespace CallOfSokoClient
                     {
                         map.IsInit = true;
                         HealthViewer = new LifeBar(map.ActualPlayer!.Health);
+                        AmmoBarViewer = new AmmoBar(map.ActualPlayer.Gun.Ammo, mainDisplay);
+                        RealodingBarViewer = new RealodingBar(mainDisplay, map.ActualPlayer!.Gun.ClipSize, map.ActualPlayer.Gun.RealodingTime);
                         map.UpdateLife += Map_UpdateLife;
-                        LifePictureBox.Invalidate();
                     }
                 });
                 connection?.On<int>("JoiningConfirmed", (id) =>
@@ -102,14 +130,11 @@ namespace CallOfSokoClient
             {
                 Debug.WriteLine(ex);
             }
-
-
         }
 
         private void Map_UpdateLife(object? sender, EventArgs e)
         {
             HealthViewer!.PlayerLife = map.ActualPlayer!.Health;
-            LifePictureBox.Invalidate();
         }
 
         private void mainDisplay_Paint(object sender, PaintEventArgs e)
@@ -117,6 +142,12 @@ namespace CallOfSokoClient
             foreach (Block block in map.MapDisplay.ToImmutableList())
             {
                 block.DrawBlock(e, mainDisplay);
+            }
+            if (map.IsInit)
+            {
+                HealthViewer!.Update(e);
+                AmmoBarViewer!.Update(e);
+                RealodingBarViewer!.Update(e);
             }
         }
         private void UIUpdater()
@@ -162,17 +193,20 @@ namespace CallOfSokoClient
 
         private void BulletCollision(Block block)
         {
-            foreach (Bullet b in map.BulletList.ToImmutableList())
+            foreach (Bullet b in map.BulletList.ToList())
             {
-                if (TestCollision(b.HitBox, block.HitBox))
+                if (b != null)
                 {
-                    if (block.GetType() == typeof(Player) && (Player)block == map.ActualPlayer && map.ActualPlayer!.Id != b.IdPlayer)
+                    if (TestCollision(b.HitBox, block.HitBox))
                     {
-                        map.ActualPlayer.Health -= b.Damage;
-                    }
-                    if (block.GetType() == typeof(Wall) || (block.GetType() == typeof(Player) && ((Player)block).Id != b.IdPlayer))
-                    {
-                        map.RemoveBullet(b);
+                        if (block.GetType() == typeof(Player) && (Player)block == map.ActualPlayer && map.ActualPlayer!.Id != b.IdPlayer)
+                        {
+                            map.ActualPlayer.Health -= b.Damage;
+                        }
+                        if (block.GetType() == typeof(Wall) || (block.GetType() == typeof(Player) && ((Player)block).Id != b.IdPlayer))
+                        {
+                            map.RemoveBullet(b);
+                        }
                     }
                 }
             }
@@ -226,7 +260,7 @@ namespace CallOfSokoClient
                 MyUser.MovementInput[e.KeyCode] = true;
                 ++MyUser.IsMoving;
             }
-            if (e.KeyCode == Keys.R) { map.ActualPlayer!.Gun.Reload(); }
+            if (e.KeyCode == Keys.R) { map.ActualPlayer!.InRealoding = true; }
         }
 
 
@@ -251,6 +285,7 @@ namespace CallOfSokoClient
             Dictionary<string, int>? shot = map.ActualPlayer?.Gun.Shoot();
             if (shot != null)
             {
+                AmmoBarViewer!.UpdateAmmo(map.ActualPlayer!.Gun.Ammo);
                 connection?.InvokeAsync("Shoot", MyUser.UserId, shot);
             }
         }
@@ -261,15 +296,6 @@ namespace CallOfSokoClient
             {
                 int angle = (int)Math.Round(Math.Atan2((e.Y - map.ActualPlayer!.Y), e.X - map.ActualPlayer!.X) * 180 / Math.PI);
                 map.ActualPlayer!.Angle = angle;
-            }
-        }
-
-        private void LifePictureBox_Paint(object sender, PaintEventArgs e)
-        {
-            Debug.WriteLine("Called");
-            if (map.IsInit)
-            {
-                HealthViewer!.Update(e);
             }
         }
     }
