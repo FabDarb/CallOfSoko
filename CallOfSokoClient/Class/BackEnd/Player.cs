@@ -9,6 +9,8 @@ namespace CallOfSokoClient.Class.BackEnd
         public Gun Gun { get; set; }
         public bool InRealoding { get; set; } = false;
 
+        public event EventHandler? IsDead;
+
         private int _Health;
         public int Health
         {
@@ -17,6 +19,10 @@ namespace CallOfSokoClient.Class.BackEnd
             {
                 _Health = value;
                 ViewLifeBar?.Invoke(value, EventArgs.Empty);
+                if (_Health == 0)
+                {
+                    IsDead?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
 
