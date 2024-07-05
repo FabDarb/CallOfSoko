@@ -118,6 +118,7 @@ namespace CallOfSokoClient
                         HealthViewer = new LifeBar(map.ActualPlayer!.Health);
                         AmmoBarViewer = new AmmoBar(map.ActualPlayer.Gun.Ammo, mainDisplay);
                         RealodingBarViewer = new RealodingBar(mainDisplay, map.ActualPlayer!.Gun.ClipSize, map.ActualPlayer.Gun.RealodingTime);
+                        map.ActualPlayer.IsDead += ActualPlayer_IsDead;
                         map.UpdateLife += Map_UpdateLife;
                     }
                 });
@@ -125,11 +126,27 @@ namespace CallOfSokoClient
                 {
                     MyUser.UserId = id;
                 });
+                connection?.On<int>("ThisPlayerLoose", (id) =>
+                {
+                    if (id == map.ActualPlayer?.Id)
+                    {
+                        MessageBox.Show("Looser");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Winner");
+                    }
+                });
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
             }
+        }
+
+        private void ActualPlayer_IsDead(object? sender, EventArgs e)
+        {
+            connection?.InvokeAsync("ThisPlayerIsDead", map.ActualPlayer!.Id);
         }
 
         private void Map_UpdateLife(object? sender, EventArgs e)

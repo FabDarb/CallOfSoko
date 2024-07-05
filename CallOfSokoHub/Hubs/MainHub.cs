@@ -19,5 +19,11 @@ namespace CallOfSokoHub
         {
             mainGameProcess.PlayerShoot(userId, shot);
         }
+
+        public void ThisPlayerIsDead(int playerId)
+        {
+            //todo in EndGame
+            Clients.All.SendAsync("ThisPlayerLoose", playerId);
+        }
     }
 }

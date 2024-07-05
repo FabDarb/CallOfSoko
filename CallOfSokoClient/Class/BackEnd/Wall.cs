@@ -14,7 +14,7 @@ namespace CallOfSokoClient.Class.BackEnd
         }
         public override void DrawBlock(PaintEventArgs e, PictureBox display)
         {
-            e.Graphics.FillRectangle(Brushes.Brown, HitBox);
+            e.Graphics.FillRectangle(Brushes.SandyBrown, HitBox);
         }
     }
 }
