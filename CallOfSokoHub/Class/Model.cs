@@ -7,6 +7,7 @@ namespace CallOfSokoHub
 
         public const int Width = 16;
         public const int Height = 9;
+        public const int Size = 100;
         public List<DataBlock> Map { get; set; }
         public List<DataPlayer> PlayerList { get; set; }
         public List<string> BulletList { get; set; }
@@ -42,7 +43,7 @@ namespace CallOfSokoHub
                     if (mazeWallMap[x, y] == null)
                     {
                         isNotPlaced = false;
-                        PlayerList.Add(new DataPlayer(user.Id, x * 50, y * 50, 0));
+                        PlayerList.Add(new DataPlayer(user.Id, x * Size, y * Size, 0));
                     }
                 }
             }
@@ -65,14 +66,14 @@ namespace CallOfSokoHub
         private void UseTemplateMap()
         {
             Map.Clear();
-            Map.Add(new DataBlock(200, 50, DataBlockType.Wall));
-            Map.Add(new DataBlock(200, 100, DataBlockType.Wall));
-            Map.Add(new DataBlock(200, 150, DataBlockType.Wall));
-            Map.Add(new DataBlock(200, 200, DataBlockType.Wall));
-            Map.Add(new DataBlock(150, 200, DataBlockType.Wall));
-            Map.Add(new DataBlock(250, 200, DataBlockType.Wall));
-            Map.Add(new DataBlock(250, 250, DataBlockType.Wall));
-            Map.Add(new DataBlock(250, 300, DataBlockType.Wall));
+            Map.Add(new DataBlock(200, 50, Size, DataBlockType.Wall));
+            Map.Add(new DataBlock(200, 100, Size, DataBlockType.Wall));
+            Map.Add(new DataBlock(200, 150, Size, DataBlockType.Wall));
+            Map.Add(new DataBlock(200, 200, Size, DataBlockType.Wall));
+            Map.Add(new DataBlock(150, 200, Size, DataBlockType.Wall));
+            Map.Add(new DataBlock(250, 200, Size, DataBlockType.Wall));
+            Map.Add(new DataBlock(250, 250, Size, DataBlockType.Wall));
+            Map.Add(new DataBlock(250, 300, Size, DataBlockType.Wall));
         }
         public void MovePlayerOnList(DataPlayer player)
         {
@@ -190,7 +191,7 @@ namespace CallOfSokoHub
                     {
                         if (mazeWallMap[x, y] == null)
                         {
-                            mazeWallMap[x, y] = new DataBlock(x * 50, y * 50, DataBlockType.Wall);
+                            mazeWallMap[x, y] = new DataBlock(x * Size, y * Size, Size, DataBlockType.Wall);
                         }
                     }
                 }
@@ -205,7 +206,7 @@ namespace CallOfSokoHub
                 {
                     if (x % 2 == 0 || y % 2 == 1)
                     {
-                        mazeWallMap[x, y] = new DataBlock(x * 50, y * 50, DataBlockType.Wall);
+                        mazeWallMap[x, y] = new DataBlock(x * Size, y * Size, Size, DataBlockType.Wall);
                     }
                 }
             }
