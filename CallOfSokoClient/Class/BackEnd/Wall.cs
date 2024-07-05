@@ -5,11 +5,11 @@ namespace CallOfSokoClient.Class.BackEnd
     public class Wall : Block
     {
 
-        public Wall(int x, int y)
+        public Wall(int x, int y, int size)
         {
             X = x;
             Y = y;
-            HitBox = new Rectangle(X, Y, 50, 50);
+            HitBox = new Rectangle(X, Y, size, size);
             Type = DataBlockType.Wall;
         }
         public override void DrawBlock(PaintEventArgs e, PictureBox display)

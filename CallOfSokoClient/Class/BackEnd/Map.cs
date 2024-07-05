@@ -25,7 +25,7 @@ namespace CallOfSokoClient.Class.BackEnd
                 switch (datablock.Type)
                 {
                     case DataBlockType.Wall:
-                        MapDisplay.Add(new Wall(datablock.X, datablock.Y));
+                        MapDisplay.Add(new Wall(datablock.X, datablock.Y, datablock.Size));
                         break;
                 }
             }

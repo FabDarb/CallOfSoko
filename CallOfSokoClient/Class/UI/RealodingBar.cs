@@ -6,6 +6,7 @@
         public int TickUpdater { get; set; }
 
         public int Width { get; set; }
+
         public RealodingBar(PictureBox display, int ammo, int realodingTotalTime)
         {
             X = display.Width;

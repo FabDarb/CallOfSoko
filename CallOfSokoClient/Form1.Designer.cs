@@ -37,7 +37,7 @@
             mainDisplay.Dock = DockStyle.Fill;
             mainDisplay.Location = new Point(0, 0);
             mainDisplay.Name = "mainDisplay";
-            mainDisplay.Size = new Size(800, 450);
+            mainDisplay.Size = new Size(1584, 861);
             mainDisplay.TabIndex = 0;
             mainDisplay.TabStop = false;
             mainDisplay.Click += mainDisplay_Click;
@@ -48,12 +48,13 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1584, 861);
             Controls.Add(mainDisplay);
             Name = "Form1";
             Text = "Form1";
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
+            Resize += Form1_Resize;
             ((System.ComponentModel.ISupportInitialize)mainDisplay).EndInit();
             ResumeLayout(false);
         }

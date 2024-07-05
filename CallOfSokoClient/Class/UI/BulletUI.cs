@@ -6,14 +6,27 @@
 
         private Brush brush = Brushes.DarkGray;
 
+        private int _X;
+
+        public int X
+        {
+            get => _X;
+            set
+            {
+                _X = value;
+                RectangleUI = new Rectangle(value, 0, 10, 15);
+            }
+        }
+
         public BulletUI(int x, bool isHere)
         {
             UpdateBrush(isHere);
             RectangleUI = new Rectangle(x, 0, 10, 15);
         }
 
-        public void Update(PaintEventArgs e)
+        public void Update(PaintEventArgs e, int x)
         {
+            X = x;
             e.Graphics.FillRectangle(brush, RectangleUI);
         }
 

@@ -334,5 +334,10 @@ namespace CallOfSokoClient
                 map.ActualPlayer!.Angle = angle;
             }
         }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            RealodingBarViewer!.X = mainDisplay.Width;
+        }
     }
 }

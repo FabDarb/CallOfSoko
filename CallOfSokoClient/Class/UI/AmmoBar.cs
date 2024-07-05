@@ -6,8 +6,11 @@
         List<BulletUI> Bullets { get; set; } = new List<BulletUI>();
 
         public int AmmoTotal { get; set; }
+
+        public PictureBox PictureBoxDisplay { get; set; }
         public AmmoBar(int ammo, PictureBox display)
         {
+            PictureBoxDisplay = display;
             AmmoTotal = ammo;
             int width = WidthCalculator(ammo);
             X = display.Width - width;
@@ -18,9 +21,11 @@
         }
         public override void Update(PaintEventArgs e)
         {
-            foreach (BulletUI bullet in Bullets)
+            int width = WidthCalculator(AmmoTotal);
+            X = PictureBoxDisplay.Width - width;
+            for (int i = 0; i < AmmoTotal; i++)
             {
-                bullet.Update(e);
+                Bullets[i].Update(e, X + i * 20);
             }
         }
         private int WidthCalculator(int ammo)
