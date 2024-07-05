@@ -6,15 +6,17 @@ namespace CallOfSokoHub
     {
 
         public const int Width = 15;
-        public const int Height = 8;
+        public const int Height = 7;
         public List<DataBlock> Map { get; set; }
         public List<DataPlayer> PlayerList { get; set; }
         public List<string> BulletList { get; set; }
 
         public event EventHandler? entityUpdated;
+        public bool solverIsAlive = false;
 
         private Thread solver;
-        public bool solverIsAlive = false;
+        private DataBlock[,] mazeWallMap;
+        private Random rnd = new Random();
 
         public Model()
         {
@@ -22,18 +24,27 @@ namespace CallOfSokoHub
             PlayerList = new List<DataPlayer>();
             BulletList = new List<string>();
             solver = new Thread(new ThreadStart(Solve));
+            mazeWallMap = new DataBlock[Width, Height];
             solver.Start();
         }
 
         public void GeneratePlayers(List<User> users)
         {
-            int x = 100;
-            int y = 100;
             foreach (var user in users)
             {
-                PlayerList.Add(new DataPlayer(user.Id, x, y, 0));
-                x += 100;
-                y += 100;
+                bool isNotPlaced = true;
+
+                while (isNotPlaced)
+                {
+                    int x = rnd.Next(1, Width);
+                    int y = rnd.Next(1, Height);
+
+                    if (mazeWallMap[x, y] == null)
+                    {
+                        isNotPlaced = false;
+                        PlayerList.Add(new DataPlayer(user.Id, x * 50, y * 50, 0));
+                    }
+                }
             }
         }
 
@@ -46,6 +57,7 @@ namespace CallOfSokoHub
             }
             else
             {
+                mazeWallMap = new DataBlock[Width, Height];
                 GenerateWorld();
             }
         }
@@ -82,19 +94,139 @@ namespace CallOfSokoHub
 
         private void GenerateWorld()
         {
+            GenerateWalls();
+            GenerateMaze();
+            EliminateWalls();
             GenerateBorder();
+            foreach (DataBlock block in mazeWallMap)
+            {
+                if (block != null)
+                {
+                    Map.Add(block);
+                }
+            }
+        }
+
+        private void GenerateMaze()
+        {
+            //Directions 0 Down 1 Right
+
+            DataBlock[,] workTable = new DataBlock[Width, Height];
+
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    if (x == 0 || y == 0 || x == Width - 1 || y == Height - 1)
+                    {
+                        workTable[x, y] = mazeWallMap[x, y];
+                    }
+                }
+            }
+
+
+            for (int y = 0; y < Height - 1; y++)
+            {
+                for (int x = 0; x < Width - 1; x++)
+                {
+                    if (x % 2 == 1 && y % 2 == 1)
+                    {
+                        int direction = rnd.Next(2);
+                        int dx = MazeDirectionSetter(x, y, direction, "dx");
+                        int dy = MazeDirectionSetter(x, y, direction, "dy");
+
+                        if ((dx >= 0 && dy >= 0 || dx < Width - 1 || dy < Height - 1) || mazeWallMap[dx, dy] == workTable[dx, dx])
+                        {
+                            if (direction == 0)
+                            {
+                                direction = 1;
+                            }
+                            else
+                            {
+                                direction = 0;
+                            }
+                            dx = MazeDirectionSetter(x, y, direction, "dx");
+                            dy = MazeDirectionSetter(x, y, direction, "dy");
+
+                        }
+                        mazeWallMap[dx, dy] = null!;
+
+                    }
+                }
+            }
+        }
+
+        private int MazeDirectionSetter(int x, int y, int direction, string d)
+        {
+            int dx = x;
+            int dy = y;
+
+
+            if (direction == 0)
+            {
+                ++dx;
+            }
+            else
+            {
+                ++dy;
+            }
+
+            if (d == "dx")
+            {
+                return dx;
+            }
+            else
+            {
+                return dy;
+            }
         }
 
         private void GenerateBorder()
         {
-            for (int i = 0; i <= Width; i++)
+            for (int y = 0; y < Height; y++)
             {
-                for (int j = 0; j <= Height; j++)
+                for (int x = 0; x < Width; x++)
                 {
-                    if (i == 0 || j == 0 || i == Width || j == Height)
+                    if (x == 0 || y == 0 || x == Width - 1 || y == Height - 1)
                     {
-                        Map.Add(new DataBlock(i * 50, j * 50, DataBlockType.Wall));
+                        if (mazeWallMap[x, y] == null)
+                        {
+                            mazeWallMap[x, y] = new DataBlock(x * 50, y * 50, DataBlockType.Wall);
+                        }
                     }
+                }
+            }
+        }
+
+        private void GenerateWalls()
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    if (x % 2 == 0 || y % 2 == 0)
+                    {
+                        mazeWallMap[x, y] = new DataBlock(x * 50, y * 50, DataBlockType.Wall);
+                    }
+                }
+            }
+        }
+
+        private void EliminateWalls()
+        {
+            int destructionCounter = 5;
+            for (int y = 1; y < Height - 1; y++)
+            {
+                for (int x = 1; x < Width - 1; x++)
+                {
+                    int destroyer = rnd.Next(destructionCounter);
+
+                    if (destroyer <= 0)
+                    {
+                        mazeWallMap[x, y] = null!;
+                        destructionCounter = 5;
+                    }
+                    --destructionCounter;
                 }
             }
         }
