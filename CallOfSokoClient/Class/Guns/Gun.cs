@@ -22,7 +22,7 @@
 
         public bool TestIfShoot()
         {
-            if (Ammo > 0) return true;
+            if (Ammo > 0 && InRealoding == RealodingTime) return true;
             return false;
         }
         public void Reload()
