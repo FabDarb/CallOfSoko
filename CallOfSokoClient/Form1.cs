@@ -224,9 +224,10 @@ namespace CallOfSokoClient
 
         private void BulletCollision(Block block)
         {
-            lock (map.BulletList)
+            var workBulletList = map.BulletList.ToList();
+            lock (workBulletList)
             {
-                foreach (Bullet b in map.BulletList)
+                foreach (Bullet b in workBulletList)
                 {
                     if (b != null)
                     {
