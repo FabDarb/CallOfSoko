@@ -237,7 +237,7 @@ namespace CallOfSokoClient
                             {
                                 map.ActualPlayer.Health -= b.Damage;
                             }
-                            if (block.GetType() == typeof(Wall) || (block.GetType() == typeof(Player) && ((Player)block).Id != b.IdPlayer)) d
+                            if (block.GetType() == typeof(Wall) || (block.GetType() == typeof(Player) && ((Player)block).Id != b.IdPlayer))
                             {
                                 map.RemoveBullet(b);
                             }
