@@ -5,8 +5,8 @@ namespace CallOfSokoHub
     public class Model
     {
 
-        public const int Width = 15;
-        public const int Height = 7;
+        public const int Width = 16;
+        public const int Height = 9;
         public List<DataBlock> Map { get; set; }
         public List<DataPlayer> PlayerList { get; set; }
         public List<string> BulletList { get; set; }
@@ -95,9 +95,9 @@ namespace CallOfSokoHub
         private void GenerateWorld()
         {
             GenerateWalls();
+            GenerateBorder();
             GenerateMaze();
             EliminateWalls();
-            GenerateBorder();
             foreach (DataBlock block in mazeWallMap)
             {
                 if (block != null)
@@ -113,11 +113,11 @@ namespace CallOfSokoHub
 
             DataBlock[,] workTable = new DataBlock[Width, Height];
 
-            for (int y = 0; y < Height; y++)
+            for (int y = 1; y < Height - 1; y++)
             {
-                for (int x = 0; x < Width; x++)
+                for (int x = 0; x < Width - 1; x++)
                 {
-                    if (x == 0 || y == 0 || x == Width - 1 || y == Height - 1)
+                    if (x == 0 || y == 1 || x == Width - 1 || y == Height - 1)
                     {
                         workTable[x, y] = mazeWallMap[x, y];
                     }
@@ -125,17 +125,17 @@ namespace CallOfSokoHub
             }
 
 
-            for (int y = 0; y < Height - 1; y++)
+            for (int y = 1; y < Height - 2; y++)
             {
-                for (int x = 0; x < Width - 1; x++)
+                for (int x = 0; x < Width - 2; x++)
                 {
-                    if (x % 2 == 1 && y % 2 == 1)
+                    if (x % 2 == 1 && y % 2 == 0)
                     {
                         int direction = rnd.Next(2);
                         int dx = MazeDirectionSetter(x, y, direction, "dx");
                         int dy = MazeDirectionSetter(x, y, direction, "dy");
 
-                        if ((dx >= 0 && dy >= 0 || dx < Width - 1 || dy < Height - 1) || mazeWallMap[dx, dy] == workTable[dx, dx])
+                        if ((dx < 0 || dy < 1 || dx >= Width - 2 || dy >= Height - 2) || mazeWallMap[dx, dy] == workTable[dx, dy])
                         {
                             if (direction == 0)
                             {
@@ -150,7 +150,6 @@ namespace CallOfSokoHub
 
                         }
                         mazeWallMap[dx, dy] = null!;
-
                     }
                 }
             }
@@ -183,11 +182,11 @@ namespace CallOfSokoHub
 
         private void GenerateBorder()
         {
-            for (int y = 0; y < Height; y++)
+            for (int y = 1; y < Height; y++)
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    if (x == 0 || y == 0 || x == Width - 1 || y == Height - 1)
+                    if (x == 0 || y == 1 || x >= Width - 2 || y >= Height - 2)
                     {
                         if (mazeWallMap[x, y] == null)
                         {
@@ -200,11 +199,11 @@ namespace CallOfSokoHub
 
         private void GenerateWalls()
         {
-            for (int y = 0; y < Height; y++)
+            for (int y = 1; y < Height - 1; y++)
             {
-                for (int x = 0; x < Width; x++)
+                for (int x = 0; x < Width - 1; x++)
                 {
-                    if (x % 2 == 0 || y % 2 == 0)
+                    if (x % 2 == 0 || y % 2 == 1)
                     {
                         mazeWallMap[x, y] = new DataBlock(x * 50, y * 50, DataBlockType.Wall);
                     }
@@ -215,7 +214,7 @@ namespace CallOfSokoHub
         private void EliminateWalls()
         {
             int destructionCounter = 5;
-            for (int y = 1; y < Height - 1; y++)
+            for (int y = 2; y < Height - 1; y++)
             {
                 for (int x = 1; x < Width - 1; x++)
                 {
