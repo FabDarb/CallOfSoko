@@ -224,24 +224,27 @@ namespace CallOfSokoClient
 
         private void BulletCollision(Block block)
         {
-            foreach (Bullet b in map.BulletList.ToList())
+            lock (map.BulletList)
             {
-                if (b != null)
+                foreach (Bullet b in map.BulletList.ToList())
                 {
-                    if (TestCollision(b.HitBox, block.HitBox))
+                    if (b != null)
                     {
-                        if (block.GetType() == typeof(Player) && (Player)block == map.ActualPlayer && map.ActualPlayer!.Id != b.IdPlayer)
+                        if (TestCollision(b.HitBox, block.HitBox))
                         {
-                            map.ActualPlayer.Health -= b.Damage;
-                        }
-                        if (block.GetType() == typeof(Wall) || (block.GetType() == typeof(Player) && ((Player)block).Id != b.IdPlayer))
-                        {
-                            map.RemoveBullet(b);
-                        }
-                        if (block.GetType() == typeof(Player) && b.IdPlayer != ((Player)block).Id)
-                        {
-                            ((Player)block).IsHited = true;
-                            ((Player)block).PlayerBrush = Brushes.Red;
+                            if (block.GetType() == typeof(Player) && (Player)block == map.ActualPlayer && map.ActualPlayer!.Id != b.IdPlayer)
+                            {
+                                map.ActualPlayer.Health -= b.Damage;
+                            }
+                            if (block.GetType() == typeof(Wall) || (block.GetType() == typeof(Player) && ((Player)block).Id != b.IdPlayer))
+                            {
+                                map.RemoveBullet(b);
+                            }
+                            if (block.GetType() == typeof(Player) && b.IdPlayer != ((Player)block).Id)
+                            {
+                                ((Player)block).IsHited = true;
+                                ((Player)block).PlayerBrush = Brushes.Red;
+                            }
                         }
                     }
                 }
