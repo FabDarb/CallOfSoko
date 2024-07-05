@@ -7,6 +7,7 @@ namespace CallOfSokoClient.Class.BackEnd
         public int Id { get; set; }
         public int Angle { get; set; } = 0;
         public Gun Gun { get; set; }
+        public bool InRealoding { get; set; } = false;
 
         private int _Health;
         public int Health
@@ -64,7 +65,6 @@ namespace CallOfSokoClient.Class.BackEnd
             e.Graphics.RotateTransform(Angle);
             e.Graphics.FillRectangle(brush, -(25 / 2), -(25 / 2), 25, 25);
             e.Graphics.ResetTransform();
-            e.Graphics.FillRectangle(Brushes.Black, HitBox.X, HitBox.Y, 25, 25);
         }
     }
 }
