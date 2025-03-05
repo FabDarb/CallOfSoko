@@ -243,7 +243,7 @@ namespace CallOfSokoClient
                             }
                             if (block.GetType() == typeof(Player) && b.IdPlayer != ((Player)block).Id)
                             {
-                                a
+
                                 ((Player)block).IsHited = true;
                                 ((Player)block).PlayerBrush = Brushes.Red;
                             }
